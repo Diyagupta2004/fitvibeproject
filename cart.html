@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart - FitVibe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #111111;
+      color: #EDEDED;
+      margin: 0;
+    }
+
+    header {
+      background-color: #1A1A1A;
+      padding: 15px 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(to right, #DA70D6, #C084FC);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      color: #FAFAFA;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      position: relative;
+      padding-bottom: 3px;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      background: #C084FC;
+      left: 0;
+      bottom: 0;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+
+    .cart-container {
+      max-width: 800px;
+      margin: 80px auto;
+      padding: 25px;
+      background-color: #181818;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(128, 90, 213, 0.15);
+    }
+
+    .cart-container h2 {
+      text-align: center;
+      font-size: 2.2rem;
+      background: linear-gradient(to right, #A78BFA, #C084FC);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      border-bottom: 1px solid #333;
+      align-items: center;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-item h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #D6BCFA;
+    }
+
+    .item-price {
+      color: #C4B5FD;
+      font-size: 1rem;
+    }
+
+    .delete-btn {
+      cursor: pointer;
+      border: none;
+      background-color: #1F1F1F;
+      padding: 8px;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .delete-btn i {
+      color: #FFFFFF;
+      font-size: 1rem;
+    }
+
+    .delete-btn:hover {
+      background-color: #2C2C2C;
+    }
+
+    .cart-total {
+      text-align: right;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 25px;
+      color: #E0CFFF;
+    }
+
+    .empty-message {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #888;
+    }
+
+    .checkout-btn {
+      margin-top: 25px;
+      display: inline-block;
+      background-color: #8B5CF6;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 24px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .checkout-btn:hover {
+      background-color: #A78BFA;
+      transform: scale(1.05);
+    }
+
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #2196F3;
+      color: white;
+      text-align: center;
+      border-radius: 20px;
+      padding: 14px;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      font-size: 1rem;
+      box-shadow: 0 0 10px rgba(128, 90, 213, 0.2);
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-container">
+      <h1>FitVibe</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="FitVibe.html">HOME</a></li>
+          <li><a href="BMIcheck.html">BMI</a></li>
+          <li><a href="pricing.html">PRICING</a></li>
+          <li><a href="cart.html">CART</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="cart-container">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <div class="cart-total" id="cart-total"></div>
+    <div style="text-align:center;">
+      <button class="checkout-btn" onclick="proceedToPay()">Proceed to Pay</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Placeholder</div>
+
+  <script>
+    const cartItemsDiv = document.getElementById('cart-items');
+    const cartTotalDiv = document.getElementById('cart-total');
+    const toast = document.getElementById('toast');
+
+    let total = 0;
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    function renderCart() {
+      cartItemsDiv.innerHTML = '';
+      total = 0;
+
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = '<p class="empty-message">Your cart is currently empty.</p>';
+        cartTotalDiv.textContent = '';
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        total += item.price;
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+        itemDiv.innerHTML = `
+          <div><h3>${item.name}</h3></div>
+          <div class="item-price">${item.price.toFixed(2)}</div>
+          <div>
+            <button class="delete-btn" onclick="removeItem(${index})" title="Remove">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        `;
+        cartItemsDiv.appendChild(itemDiv);
+      });
+
+      cartTotalDiv.textContent = `Total: ${total.toFixed(2)}`;
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      showToast('Item removed from cart');
+      renderCart();
+    }
+
+    function proceedToPay() {
+      if (cart.length === 0) {
+        showToast('Your cart is empty.');
+        return;
+      }
+
+      if (!isLoggedIn) {
+        showToast('Please login to continue...');
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1500);
+        return;
+      }
+
+      showToast('Redirecting to payment...');
+      setTimeout(() => {
+        // Redirect to the payment page which connects to payment.index
+        window.location.href = 'payment.html';
+      }, 1500);
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.className = 'toast show';
+      setTimeout(() => {
+        toast.className = 'toast';
+      }, 3000);
+    }
+
+    renderCart();
+  </script>
+
+</body>
+
+</html>

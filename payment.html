@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FitVibe - Payment</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .payment-container {
+      background-color: #1e1e1e;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(138, 43, 226, 0.2);
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .payment-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      background: linear-gradient(to right, #a78bfa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      color: #ccc;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: #2a2a2a;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    input::placeholder {
+      color: #888;
+    }
+
+    .payment-methods {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .payment-methods i {
+      font-size: 1.8rem;
+      color: #888;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .payment-methods i.active {
+      color: #c084fc;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background-color: #a78bfa;
+      color: black;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #c084fc;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #4caf50;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="payment-container">
+    <h2>Payment Details</h2>
+
+    <div class="payment-methods">
+      <i class="fab fa-cc-visa active" onclick="selectMethod(this)"></i>
+      <i class="fab fa-cc-mastercard" onclick="selectMethod(this)"></i>
+      <i class="fab fa-google-pay" onclick="selectMethod(this)"></i>
+      <i class="fab fa-cc-amex" onclick="selectMethod(this)"></i>
+    </div>
+
+    <form id="paymentForm">
+      <div class="input-group">
+        <label for="cardholder">Cardholder Name</label>
+        <input type="text" id="cardholder" placeholder="John Doe" required />
+      </div>
+
+      <div class="input-group">
+        <label for="cardnumber">Card Number</label>
+        <input type="text" id="cardnumber" placeholder="1234 5678 9012 3456" maxlength="19" required />
+      </div>
+
+      <div class="input-group" style="display: flex; gap: 10px;">
+        <div style="flex: 1;">
+          <label for="expiry">Expiry</label>
+          <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required />
+        </div>
+        <div style="flex: 1;">
+          <label for="cvv">CVV</label>
+          <input type="text" id="cvv" placeholder="123" maxlength="4" required />
+        </div>
+      </div>
+
+      <button type="submit">Pay Now</button>
+    </form>
+  </div>
+
+  <div class="notification" id="notification">Payment Successful!</div>
+
+  <script>
+    function selectMethod(element) {
+      const methods = document.querySelectorAll('.payment-methods i');
+      methods.forEach(icon => icon.classList.remove('active'));
+      element.classList.add('active');
+    }
+
+    const form = document.getElementById("paymentForm");
+    const notification = document.getElementById("notification");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      notification.style.display = "block";
+      notification.textContent = "Payment Successful!";
+      setTimeout(() => {
+        notification.style.display = "none";
+        window.location.href = "FitVibe.html";
+      }, 2000);
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FitVibe Gym Pricing</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #FAFAFA;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #1A1A1A;
+      padding: 15px 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(to right, #da70d6, #C084FC);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #FAFAFA;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      background: #C084FC;
+      left: 0;
+      bottom: 0;
+      transition: width 0.3s ease-in-out;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    .user-dropdown {
+      position: relative;
+      cursor: pointer;
+    }
+    .user-icon {
+      font-size: 1.5rem;
+      color: #FAFAFA;
+    }
+    .user-icon.logged-in { color: #00ff00; }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 35px;
+      right: 0;
+      background-color: #1A1A1A;
+      border: 1px solid #444;
+      padding: 10px;
+      border-radius: 8px;
+      min-width: 120px;
+      z-index: 999;
+    }
+    .dropdown-menu a {
+      display: block;
+      color: #FAFAFA;
+      text-decoration: none;
+      padding: 5px;
+    }
+    .dropdown-menu a:hover { background-color: #333; }
+    .user-dropdown:hover .dropdown-menu { display: block; }
+
+    .pricing-section {
+      padding: 80px 20px;
+      text-align: center;
+      background: radial-gradient(circle at center, #1C1C1E, #121212);
+    }
+    .section-header h2 {
+      font-size: 3.2rem;
+      background: linear-gradient(to right, #e56be9, #C084FC);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+    }
+    .section-header p {
+      font-size: 1.2rem;
+      color: #E6E6FA;
+      margin-bottom: 50px;
+    }
+    .pricing-cards-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    .pricing-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      width: 300px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 4px 30px rgba(192, 132, 252, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      min-height: 500px;
+    }
+    .pricing-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 25px 10px rgba(192, 132, 252, 0.3);
+    }
+    .pricing-card h3 { font-size: 1.8rem; color: #DA70D6; margin-bottom: 15px; }
+    .price {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #E6E6FA;
+      margin: 20px 0;
+    }
+    .pricing-card ul {
+      list-style-type: none;
+      margin-bottom: 25px;
+    }
+    .pricing-card ul li {
+      margin: 10px 0;
+      font-size: 1.05rem;
+      color: #DCDCDC;
+    }
+    .button-group {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .subscribe-btn {
+      background: linear-gradient(to right, #7F00FF, #C084FC);
+      color: #fff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+    .subscribe-btn:hover {
+      background: #DA70D6;
+      transform: scale(1.05);
+    }
+    footer {
+      background-color: #1A1A1A;
+      padding: 25px 0;
+      text-align: center;
+      color: #E6E6FA;
+      margin-top: 50px;
+    }
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background: #2196F3;
+      color: white;
+      text-align: center;
+      border-radius: 25px;
+      padding: 16px;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(128, 90, 213, 0.4);
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.5s ease, transform 0.5s ease-in-out;
+    }
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (max-width: 768px) {
+      .header-container { flex-direction: column; gap: 10px; }
+      .pricing-cards-container { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <h1>FitVibe</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="FitVibe.html">HOME</a></li>
+          <li><a href="#">EXERCISES</a></li>
+          <li><a href="pricing.html">PRICING</a></li>
+          <li><a href="cart.html">CART</a></li>
+          <li class="user-dropdown">
+            <i id="loginIcon" class="fas fa-circle user-icon"></i>
+            <div class="dropdown-menu" id="dropdownMenu">
+              <a href="#" onclick="toggleLogin()">Toggle Login</a>
+              <a href="login.html">Login Page</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="pricing-section">
+    <div class="section-header">
+      <h2>Our Pricing Plans</h2>
+      <p>Choose the plan that fits your fitness goals and get started today!</p>
+    </div>
+
+    <div class="pricing-cards-container">
+      <!-- Basic Plan -->
+      <div class="pricing-card">
+        <h3>Basic Plan</h3>
+        <p class="price">999/- / month</p>
+        <ul>
+          <li>Access to gym equipment</li>
+          <li>1 Free Class per week</li>
+          <li>Locker Room Access</li>
+        </ul>
+        <div class="button-group">
+          <button class="subscribe-btn" onclick="addToCart('Basic Plan', '999/-')">Add to Cart</button>
+          <button class="subscribe-btn" onclick="buyNow()">Buy Now</button>
+        </div>
+      </div>
+
+      <!-- Pro Plan -->
+      <div class="pricing-card">
+        <h3>Pro Plan</h3>
+        <p class="price">1999/- / month</p>
+        <ul>
+          <li>Unlimited gym access</li>
+          <li>3 Free Classes per week</li>
+          <li>Personal Trainer Sessions</li>
+          <li>VIP Lounge Access</li>
+        </ul>
+        <div class="button-group">
+          <button class="subscribe-btn" onclick="addToCart('Pro Plan', '1999/-')">Add to Cart</button>
+          <button class="subscribe-btn" onclick="buyNow()">Buy Now</button>
+        </div>
+      </div>
+
+      <!-- Elite Plan -->
+      <div class="pricing-card">
+        <h3>Elite Plan</h3>
+        <p class="price">2999/- / month</p>
+        <ul>
+          <li>All Pro Plan Features</li>
+          <li>Unlimited Classes</li>
+          <li>24/7 Gym Access</li>
+          <li>Personalized Fitness Plans</li>
+          <li>Priority Booking</li>
+        </ul>
+        <div class="button-group">
+          <button class="subscribe-btn" onclick="addToCart('Elite Plan', '2999/-')">Add to Cart</button>
+          <button class="subscribe-btn" onclick="buyNow()">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 FitVibe Gym | All Rights Reserved</p>
+  </footer>
+
+  <div id="toast" class="toast">Item added to cart!</div>
+
+  <script>
+    function isLoggedIn() {
+      return localStorage.getItem("isLoggedIn") === "true";
+    }
+
+    function toggleLogin() {
+      const current = isLoggedIn();
+      localStorage.setItem("isLoggedIn", !current);
+      updateLoginIcon();
+    }
+
+    function updateLoginIcon() {
+      const icon = document.getElementById("loginIcon");
+      if (isLoggedIn()) {
+        icon.classList.add("logged-in");
+      } else {
+        icon.classList.remove("logged-in");
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    function addToCart(name, price) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.find(item => item.name === name)) {
+        showToast(`"${name}" is already in your cart.`);
+        return;
+      }
+      cart.push({ name, price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      showToast(`${name} added to cart!`);
+    }
+
+    function buyNow() {
+      if (!isLoggedIn()) {
+        showToast("Please log in to continue.");
+        setTimeout(() => window.location.href = "login.html", 1500);
+        return;
+      }
+      window.location.href = "payment.html";
+    }
+
+    updateLoginIcon(); // On page load
+  </script>
+</body>
+</html>
+

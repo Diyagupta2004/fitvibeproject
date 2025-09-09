@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitVibe: Zumba Workout</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #cc99ff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      margin-bottom: 1.5rem;
+      color: #e6ccff;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .video-card {
+      background-color: #1a1a1a;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #cc99ff;
+      padding: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .video-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #e6ccff;
+    }
+
+    iframe {
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+    }
+
+    .video-title {
+      margin-top: 1rem;
+      font-weight: bold;
+      font-size: 1rem;
+      color: #ffffff;
+    }
+
+    @media (max-width: 700px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>💃 FitVibe Zumba Workout</h1>
+  <p>Follow these Zumba workouts to get moving and stay fit!</p>
+
+  <div class="video-grid">
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/9_MxwQw10RI" frameborder="0" allowfullscreen></iframe>
+      <div class="video-title">10‑Min Zumba Beginner</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/mZeFvX3ALKY" frameborder="0" allowfullscreen></iframe>
+      <div class="video-title">30‑Min Beginner Latin Zumba</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/8DZktowZo_k" frameborder="0" allowfullscreen></iframe>
+      <div class="video-title">30‑Min Cardio Latin Dance</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/7riltpIqZv0" frameborder="0" allowfullscreen></iframe>
+      <div class="video-title">15‑Min Zumba Dance Party</div>
+    </div>
+  </div>
+</body>
+</html>

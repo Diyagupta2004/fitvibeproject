@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FitVibe BMI Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0d0d0d;
+      color: #f0e6ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Back arrow style */
+    .back-arrow {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+      background: #333;
+      padding: 8px 14px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #999;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .back-arrow:hover {
+      background: #555;
+      transform: translateX(-3px);
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1.5rem;
+      color: #cc66ff;
+      text-shadow: 0 0 8px #9900cc77;
+    }
+
+    .bmi-container {
+      background: #1a1a1a;
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 0 20px rgba(204, 102, 255, 0.2);
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #e6ccff;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      border: none;
+      border-radius: 10px;
+      background: #333;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.9rem;
+      background: #cc66ff;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #b84dff;
+    }
+
+    .result {
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .bmi-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #cc99ff;
+    }
+
+    .bmi-category {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Back to Home Arrow -->
+  <a href="fitvibe.html" class="back-arrow">&#8592; Home</a>
+
+  <h1>FitVibe BMI Calculator</h1>
+  <div class="bmi-container">
+    <label for="weight">Weight (kg)</label>
+    <input type="number" id="weight" placeholder="Enter your weight" required>
+
+    <label for="height">Height (cm)</label>
+    <input type="number" id="height" placeholder="Enter your height" required>
+
+    <button onclick="calculateBMI()">Calculate BMI</button>
+
+    <div class="result" id="result" style="display:none;">
+      <div class="bmi-value" id="bmi-value"></div>
+      <div class="bmi-category" id="bmi-category"></div>
+    </div>
+  </div>
+
+  <script>
+    function calculateBMI() {
+      const weight = parseFloat(document.getElementById('weight').value);
+      const height = parseFloat(document.getElementById('height').value);
+
+      if (!weight || !height || weight <= 0 || height <= 0) {
+        alert("Please enter valid values!");
+        return;
+      }
+
+      const heightInMeters = height / 100;
+      const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+      let category = "";
+
+      if (bmi < 18.5) {
+        category = "Underweight";
+      } else if (bmi < 24.9) {
+        category = "Normal weight";
+      } else if (bmi < 29.9) {
+        category = "Overweight";
+      } else {
+        category = "Obesity";
+      }
+
+      document.getElementById('bmi-value').textContent = `Your BMI: ${bmi}`;
+      document.getElementById('bmi-category').textContent = `Category: ${category}`;
+      document.getElementById('result').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FitVibe: Yoga Pose Timer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      background-color: #0d0d0d;
+      color: #00ffcc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .game-container {
+      width: 95%;
+      max-width: 480px;
+      background: #1a1a1a;
+      padding: 1.2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 15px #00ffcc;
+      text-align: center;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    img {
+      width: 200px;
+      height: 200px;
+      object-fit: contain; /* ensures full image is shown without cropping */
+      border-radius: 10px;
+      margin: 0.5rem auto;
+      display: block;
+      background-color: #000; /* fallback for transparent edges */
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+
+    #timer {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin: 0.8rem 0;
+    }
+
+    button {
+      background-color: #00ffcc;
+      color: #000;
+      padding: 0.6rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00cca3;
+    }
+
+    #pose-quote {
+      font-style: italic;
+      color: #ccc;
+      min-height: 30px;
+      font-size: 0.9rem;
+    }
+
+    #pose-name {
+      min-height: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+
+    #message {
+      min-height: 30px;
+      font-size: 0.9rem;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div>
+      <h1>🧘‍♂️ FitVibe Yoga Hold</h1>
+      <p>Hold the following yoga posture for the given time to train your body and mind.</p>
+    </div>
+
+    <div>
+      <h2 id="pose-name"></h2>
+      <img id="pose-image" src="" alt="Yoga Pose" />
+      <p id="pose-quote"></p>
+    </div>
+
+    <div>
+      <div id="timer">30</div>
+      <button onclick="startTimer()">Start Holding</button>
+      <p id="message"></p>
+    </div>
+  </div>
+
+  <script>
+    const poses = [
+      {
+        name: "Tree Pose (Vrikshasana)",
+        image: "tree.jpg.jpeg",
+        quote: "Stand tall, root deep, and balance like a tree."
+      },
+      {
+        name: "Warrior II (Virabhadrasana II)",
+        image: "warrior.jpg.jpeg",
+        quote: "Channel your inner strength and stand your ground."
+      },
+      {
+        name: "Cobra Pose (Bhujangasana)",
+        image: "cobra.jpg.jpeg",
+        quote: "Rise up, open your heart, and breathe with strength."
+      },
+      {
+        name: "Downward Dog (Adho Mukha Svanasana)",
+        image: "downwarddog.jpg.jpeg",
+        quote: "Feel the stretch and let go of all tension."
+      },
+      {
+        name: "Child’s Pose (Balasana)",
+        image: "childpose.jpg.jpeg",
+        quote: "Rest, reset, and restore your energy."
+      }
+    ];
+
+    let timeLeft = 30;
+    let timerInterval;
+
+    function getRandomPose() {
+      const index = Math.floor(Math.random() * poses.length);
+      return poses[index];
+    }
+
+    function startTimer() {
+      const pose = getRandomPose();
+      document.getElementById("pose-name").innerText = pose.name;
+      document.getElementById("pose-image").src = pose.image;
+      document.getElementById("pose-image").alt = pose.name;
+      document.getElementById("pose-quote").innerText = pose.quote;
+      document.getElementById("message").innerText = "Hold the pose! 🧘‍♀️";
+      document.getElementById("timer").innerText = timeLeft;
+
+      clearInterval(timerInterval);
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          document.getElementById("message").innerText = "🎉 Great job! You held the pose!";
+          timeLeft = 30;
+        }
+      }, 1000);
+    }
+
+    // Load a random pose initially
+    window.onload = () => {
+      const pose = getRandomPose();
+      document.getElementById("pose-name").innerText = pose.name;
+      document.getElementById("pose-image").src = pose.image;
+      document.getElementById("pose-image").alt = pose.name;
+      document.getElementById("pose-quote").innerText = pose.quote;
+    };
+  </script>
+</body>
+</html>

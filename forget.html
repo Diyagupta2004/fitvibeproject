@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FitVibe - Forgot Password</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #121212;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #e6e6fa;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 400px;
+      background: #1f1f1f;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(177, 156, 217, 0.15);
+      text-align: center;
+    }
+
+    h2 {
+      color: #b19cd9;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border: 1px solid #333;
+      border-radius: 8px;
+      background: #2c2c2c;
+      color: #e6e6fa;
+      font-size: 14px;
+      transition: border 0.3s ease;
+    }
+
+    input::placeholder {
+      color: #999;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #b19cd9;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      background: linear-gradient(to right, #b19cd9, #a188c8);
+      color: #121212;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #a188c8, #b19cd9);
+    }
+
+    /* Toast style */
+    #toast {
+      visibility: hidden;
+      min-width: 260px;
+      background-color: #a188c8;
+      color: #121212;
+      text-align: center;
+      border-radius: 8px;
+      padding: 14px 20px;
+      position: fixed;
+      z-index: 999;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 15px;
+      box-shadow: 0 0 20px rgba(177, 156, 217, 0.25);
+      transition: all 0.4s ease-in-out;
+    }
+
+    #toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Forgot Password</h2>
+    <form id="resetForm">
+      <input type="email" name="email" placeholder="Enter your email" required />
+      <button type="submit">Send Reset Link</button>
+    </form>
+  </div>
+
+  <!-- Toast message -->
+  <div id="toast">Reset link has been sent to your email.</div>
+
+  <script>
+    const form = document.getElementById("resetForm");
+    const toast = document.getElementById("toast");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // Simulate sending reset link
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+
+      form.reset();
+    });
+  </script>
+</body>
+</html>

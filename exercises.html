@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FitVibe - Workout Videos</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0d0d0d;
+      color: #f2e6ff;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.8rem;
+      margin-bottom: 2.5rem;
+      color: #C084FC;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .video-card {
+      background: #1a1a1a;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid #292929;
+    }
+
+    .video-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px rgba(192, 132, 252, 0.25);
+    }
+
+    iframe {
+      width: 100%;
+      height: 200px;
+      border: none;
+    }
+
+    .video-title {
+      padding: 1rem;
+      font-size: 1.05rem;
+      color: #e6ccff;
+      transition: color 0.3s;
+    }
+
+    .video-title:hover {
+      color: #C084FC;
+      cursor: pointer;
+    }
+
+    @media (min-width: 768px) {
+      iframe {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>FitVibe Workout Videos</h1>
+  <div class="video-grid">
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/dJlFmxiL11s" allowfullscreen></iframe>
+      <div class="video-title">7-Minute Full Body Workout</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/cbKkB3POqaY" allowfullscreen></iframe>
+      <div class="video-title">Beginner Full Body Workout</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/ml6cT4AZdqI" allowfullscreen></iframe>
+      <div class="video-title">30 Min HIIT Fat Burn</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/2pLT-olgUJs" allowfullscreen></iframe>
+      <div class="video-title">10 Min Abs Workout</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/rBuVM7fOE1Q" allowfullscreen></iframe>
+      <div class="video-title">Quick Full Body Blast</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/X655B4ISakg" allowfullscreen></iframe>
+      <div class="video-title">10-Minute Beginner Abs</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/I9nG-G4B5Bs" allowfullscreen></iframe>
+      <div class="video-title">Stretch & Flexibility</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/oAPCPjnU1wA" allowfullscreen></iframe>
+      <div class="video-title">15 Min Full Body Workout</div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/VHyGqsPOUHs" allowfullscreen></iframe>
+      <div class="video-title">Standing Abs Workout</div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,569 @@
+body {
+    background-color: black;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    
+    overflow-y: auto;
+    /* Allows scrolling */
+    scrollbar-width: none;
+    /* Hides scrollbar in Firefox */
+    -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+header {
+    background-color: black;
+      padding: 15px 0;
+      box-shadow: 0 4px 10px rgba(41, 40, 40, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      margin: 0%;
+      margin-left: -20px;
+      margin-right: -20px;
+      
+}
+   .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+header h1 {
+
+    color: #f1eff3;
+      font-size: 2.5rem;
+      background: linear-gradient(to right, #da70d6, #C084FC);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+
+
+.nav-links a {
+   color: #FAFAFA;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      padding-bottom: 3px;
+      position: relative;
+}
+
+.nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      background: #C084FC;
+      left: 0;
+      bottom: 0;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+
+.hero-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+    margin-top: 0px;
+    padding: 0 80px;
+}
+
+.fitvibe {
+    font-size: 9.5em;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: white;
+    text-align: left;
+    margin-bottom: 50px;
+    margin-left: -80px;
+    position: relative;
+    margin-top: 30px;
+}
+
+.hero-image img {
+    width: 600px;
+    height: 530px;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-left: -50px;
+}
+
+.tagline {
+    font-size: 1.5em;
+    font-weight: 400;
+    margin-top: 0;
+    opacity: 0.9;
+    text-align: left;
+    margin-left: -10px;
+}
+
+.button-container {
+    margin-top: 10px;
+    display: flex;
+    gap: 20px;
+    padding-left: 0px;
+    margin-left: -10px;
+}
+
+.btn-green,
+.btn-grey {
+    padding: 12px 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    border: 2px solid white;
+}
+
+.btn-green {
+    background-color: #800080;
+    color: black;
+}
+
+.btn-grey {
+    background-color: white;
+    color: black;
+}
+
+.btn-green:hover,
+.btn-grey:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5em;
+    color: #800080;
+    /* Adjust to your theme */
+    animation: bounce 1.5s infinite ease-in-out;
+}
+
+/* Add the downward arrow symbol */
+.scroll-indicator::after {
+    content: '\21E3';
+    /* Unicode for downward double arrow */
+    display: block;
+    text-align: center;
+}
+
+/* Smooth Bouncing Effect */
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translate(-50%, 0);
+    }
+
+    50% {
+        transform: translate(-50%, 10px);
+    }
+}
+
+/* Ensure the arrow is part of the animation */
+.scroll-indicator::after {
+    content: '\21E3';
+    /* Unicode for downward double arrow */
+    display: block;
+    text-align: center;
+    animation: bounce 1.5s infinite;
+    /* Apply the same animation */
+}
+
+
+.footer-img {
+    flex-shrink: 0;
+    margin-top: -110px;
+    padding-right: 70px;
+    position: relative;
+}
+
+.footer-img img {
+    width: 850px;
+    height: 600px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px 50px;
+    margin-top: 100px;
+    margin-right: 50px;
+    margin-left: 50px;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+
+.image-container img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+.image-container figcaption {
+    margin-top: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    position: relative;
+    z-index: 2;
+}
+
+.image-container:hover {
+    transform: scale(1.05);
+
+    box-shadow: 0px 0px 15px rgba(10, 10, 10, 0.8);
+
+}
+
+
+.btn-green,
+.btn-grey {
+    padding: 10px 25px;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.new-section {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 4em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.new-section .btn-green {
+    margin-top: 20px;
+    background-color: #800080;
+    color: white;
+    padding: 10px 8px;
+    font-size: 25px;
+}
+
+.image-grid {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin: 80px auto;
+    padding: 0 50px;
+    max-width: 1400px;
+}
+
+.image-grid img {
+    width: 100%;
+    max-width: 400px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.image-grid img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(255, 0, 255, 0.6);
+}
+
+
+.list-section {
+    margin-top: 50px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.list-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.list-section li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 0;
+    position: relative;
+}
+
+.list-section li::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+}
+
+.list-section li:hover {
+    color: #C724FF;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.list-section li span:first-child {
+    flex-basis: 80px;
+    text-align: left;
+}
+
+.list-section li span:nth-child(2) {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.list-section li span:last-child {
+    flex-basis: 80px;
+    text-align: right;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(61, 70, 73, 0.93);
+    transition: 0.3s;
+    width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: rgb(251, 244, 244);
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 #C724FF;
+    transform: scale(1.05);
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.container {
+    padding: 15px;
+    color: black;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.rectangle {
+    width: 100%;
+    height: 45vh;
+    background-color: rgb(43, 43, 43);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    bottom: 0;
+    left: 0;
+}
+
+.social-links {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.social-links li {
+    display: inline-block;
+    margin: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.social-media {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.social-media li {
+    font-size: 1.5rem;
+    color: #ffffff;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.social-media li::after,
+.social-media li::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, #C724FF, #800080);
+    bottom: -5px;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s ease-out;
+}
+
+.social-media li::before {
+    top: -5px;
+    transform-origin: left;
+}
+
+.social-media li:hover::after,
+.social-media li:hover::before {
+    transform: scaleX(1);
+}
+
+.rectangle1 {
+    width: 100%;
+    height: 80vh;
+    background-color: rgb(88, 87, 87);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    bottom: 0;
+    left: 0;
+}
+
+
+
+/* Dropdown styling */
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  background-color: #222;
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 10px;
+  top: 40px;
+  right: 0;
+  z-index: 999;
+}
+
+.profile-dropdown a {
+  display: block;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+}
+
+.profile-dropdown a:hover {
+  background-color: #444;
+}
+ #toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff4d4d;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 30px;
+    font-weight: bold;
+    z-index: 9999;
+    display: none;
+    animation: fadeInOut 3s ease-in-out;
+  }
+
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+    }
+
+    10% {
+      opacity: 1;
+    }
+
+    90% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }

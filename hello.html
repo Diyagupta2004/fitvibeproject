@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghanisha - Computer Science Student</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.4;
+            color: #333;
+            background: white;
+            font-size: 13px;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .cv-container {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            page-break-inside: avoid;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4a9b8f, #5cb3a6);
+            color: white;
+            padding: 35px 0;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 38px;
+            font-weight: 300;
+            letter-spacing: 8px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .header .title {
+            font-size: 16px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+        }
+        
+        .sidebar {
+            background: #f8f9fa;
+            width: 2.8in;
+            padding: 25px 22px;
+            border-right: 1px solid #e9ecef;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 25px 30px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 2px solid #4a9b8f;
+            padding-bottom: 5px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        
+        .contact-item .icon {
+            width: 15px;
+            margin-right: 10px;
+            color: #4a9b8f;
+        }
+        
+        .education-item {
+            margin-bottom: 18px;
+        }
+        
+        .education-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 4px;
+            color: #2c3e50;
+            line-height: 1.3;
+        }
+        
+        .education-school {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        
+        .education-details {
+            font-size: 11px;
+            color: #888;
+        }
+        
+        .skills-category {
+            margin-bottom: 12px;
+        }
+        
+        .skills-category-title {
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .skills-items {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .job {
+            margin-bottom: 22px;
+        }
+        
+        .job-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .job-company {
+            font-size: 14px;
+            color: #4a9b8f;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .job-period {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .achievements {
+            list-style: none;
+        }
+        
+        .achievements li {
+            position: relative;
+            padding-left: 15px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .achievements li:before {
+            content: "•";
+            color: #4a9b8f;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .project {
+            margin-bottom: 18px;
+        }
+        
+        .project-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        
+        .project-description {
+            font-size: 12px;
+            line-height: 1.4;
+            color: #555;
+        }
+        
+        @media print {
+            body { font-size: 12px; }
+            .cv-container { 
+                width: 100%; 
+                height: 100%; 
+                box-shadow: none;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cv-container">
+        <div class="header">
+            <h1>GHANISHA</h1>
+            <div class="title">Computer Science Student</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="section">
+                    <div class="section-title">Contact</div>
+                    <div class="contact-item">
+                        <span class="icon">📧</span> ghanishasaini@gmail.com
+                    </div>
+                    <div class="contact-item">
+                        <span class="icon">📱</span> 913.829.3929
+                    </div>
+                    <div class="contact-item">
+                        <span class="icon">💼</span> LinkedIn-Ghanisha
+                    </div>
+                    <div class="contact-item">
+                        <span class="icon">📍</span> Radaur, Haryana
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Education</div>
+                    <div class="education-item">
+                        <div class="education-title">Bachelor of Technology</div>
+                        <div class="education-title">Computer Science & Engineering</div>
+                        <div class="education-school">Seth Jai Parkash Mukandlal Institute of Engineering & Technology</div>
+                        <div class="education-details">2022-2026 | CGPA: 8.15</div>
+                    </div>
+                    
+                    <div class="education-item">
+                        <div class="education-title">Higher Secondary (PCM)</div>
+                        <div class="education-school">Gita Niketan Awasiya Vidyalaya</div>
+                        <div class="education-details">2022 | 91%</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Skills</div>
+                    <div class="skills-category">
+                        <div class="skills-category-title">Languages:</div>
+                        <div class="skills-items">Python, C, C++, DSA</div>
+                    </div>
+                    <div class="skills-category">
+                        <div class="skills-category-title">Technologies:</div>
+                        <div class="skills-items">HTML, CSS, JavaScript, React.js</div>
+                    </div>
+                    <div class="skills-category">
+                        <div class="skills-category-title">Backend:</div>
+                        <div class="skills-items">Node.js, MongoDB</div>
+                    </div>
+                    <div class="skills-category">
+                        <div class="skills-category-title">Tools:</div>
+                        <div class="skills-items">Tkinter, Vite</div>
+                    </div>
+                    <div class="skills-category">
+                        <div class="skills-category-title">Cloud:</div>
+                        <div class="skills-items">Google Cloud, Azure AI</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="section">
+                    <div class="section-title">Experience</div>
+                    <div class="job">
+                        <div class="job-title">Software Development Training</div>
+                        <div class="job-company">Achievers Technologies</div>
+                        <div class="job-period">July 2023 - August 2023 | Kurukshetra, Haryana</div>
+                        <ul class="achievements">
+                            <li>Completed intensive training in modern web development technologies</li>
+                            <li>Gained hands-on experience with full-stack development practices</li>
+                            <li>Collaborated with development team on real-world projects</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Projects</div>
+                    <div class="project">
+                        <div class="project-title">AgriFarma</div>
+                        <div class="project-description">
+                            Developed a platform enabling farmers to purchase agricultural medicines and supplies. Integrated features for accessing government updates and schemes. Implemented personalized recommendation tools using React.js, Node.js, and MongoDB.
+                        </div>
+                    </div>
+                    
+                    <div class="project">
+                        <div class="project-title">Random Password Generator</div>
+                        <div class="project-description">
+                            Built a Python application using Tkinter for generating secure passwords. Features customizable length and complexity options with strong encryption using Python's random module.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Achievements</div>
+                    <div class="job">
+                        <div class="job-title">Academic Excellence</div>
+                        <ul class="achievements">
+                            <li>Award of Excellence in 12th Standard</li>
+                            <li>Academic Awards from 7th to 12th Standard</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="job">
+                        <div class="job-title">Technical Participation</div>
+                        <ul class="achievements">
+                            <li>Participated in Google Cloud "The Arcade"</li>
+                            <li>Built Azure AI Vision and NLP solutions</li>
+                            <li>Participated in India Summer Lensathon 2023</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="job">
+                        <div class="job-title">Leadership & Sports</div>
+                        <ul class="achievements">
+                            <li>Co-convener of Java Club (College Technical Club)</li>
+                            <li>Gold medals in State Level Football (2015-16, 2017-18)</li>
+                            <li>Member of organizing team for Enchanté (Annual Fest)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

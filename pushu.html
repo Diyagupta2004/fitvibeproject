@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FitVibe: Push-Up Selfie Board</title>
+  <style>
+    body {
+      background-color: #121212;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: lavender;
+      margin-bottom: 30px;
+    }
+
+    #uploadForm {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    input[type="file"] {
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #333;
+      color: lavender;
+      border: none;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: lavender;
+      color: #121212;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      overflow: hidden;
+      text-align: center;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(255, 182, 193, 0.2);
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .like-btn {
+      margin-top: 10px;
+      background-color: #ff66c4;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .like-count {
+      margin-top: 5px;
+      color: lavender;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💪 Push-Up Selfie Board</h1>
+
+  <div id="uploadForm">
+    <input type="file" id="imageInput" accept="image/*" />
+    <button onclick="uploadImage()">Upload</button>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <!-- Uploaded images will appear here -->
+  </div>
+
+  <script>
+    function uploadImage() {
+      const input = document.getElementById('imageInput');
+      const file = input.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const gallery = document.getElementById('gallery');
+
+          const card = document.createElement('div');
+          card.className = 'card';
+
+          const img = document.createElement('img');
+          img.src = e.target.result;
+
+          const likeBtn = document.createElement('button');
+          likeBtn.className = 'like-btn';
+          likeBtn.textContent = '❤️ Like';
+
+          const likeCount = document.createElement('div');
+          likeCount.className = 'like-count';
+          likeCount.textContent = '0 likes';
+
+          let count = 0;
+          likeBtn.addEventListener('click', () => {
+            count++;
+            likeCount.textContent = count + ' like' + (count === 1 ? '' : 's');
+            likeBtn.textContent = '🔥 Liked';
+            likeBtn.disabled = true;
+          });
+
+          card.appendChild(img);
+          card.appendChild(likeBtn);
+          card.appendChild(likeCount);
+
+          gallery.prepend(card); // Show newest first
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Please select a photo to upload!');
+      }
+    }
+  </script>
+</body>
+</html>
