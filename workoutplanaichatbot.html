@@ -1,288 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FitVibe Chatbot</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #0d0d0d;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FitVibe Bot</title>
+    <style>
+        /* Modern Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-    .chat-container {
-      width: 100%;
-      max-width: 420px;
-      height: 600px;
-      background: #1a1a1a;
-      border-radius: 16px;
-      box-shadow: 0 0 30px rgba(204, 102, 255, 0.2);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+        :root {
+            --primary-purple: #7a3cff;
+            --secondary-purple: #9e61ff;
+            --tertiary-purple: #cc66ff;
+            --dark-bg: #0d0d0d;
+            --chat-bg: #1a1a1a;
+            --input-bg: #222;
+            --glow-color: #9d00ff;
+        }
 
-    .chat-header {
-      background: #7a3cff;
-      padding: 16px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2rem;
-      color: #fff;
-    }
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: var(--dark-bg);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
 
-    .chat-messages {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+        /* Interactive Animated Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(157, 0, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 90% 80%, rgba(157, 0, 255, 0.15) 0%, transparent 50%);
+            animation: moveGradient 15s infinite alternate ease-in-out;
+            z-index: 0;
+        }
 
-    .msg {
-      max-width: 75%;
-      padding: 10px 14px;
-      border-radius: 12px;
-      line-height: 1.4;
-      font-size: 0.95rem;
-    }
+        @keyframes moveGradient {
+            from {
+                transform: translate(0, 0);
+            }
+            to {
+                transform: translate(5%, 5%);
+            }
+        }
 
-    .user {
-      align-self: flex-end;
-      background: #cc66ff;
-      color: #fff;
-    }
+        .chat-container {
+            width: 100%;
+            max-width: 420px;
+            height: 600px;
+            background: rgba(26, 26, 26, 0.8); /* Semi-transparent for frosted glass */
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+        }
 
-    .bot {
-      align-self: flex-start;
-      background: #2a2a2a;
-      color: #e0d6ff;
-    }
+        .chat-header {
+            background: var(--primary-purple);
+            padding: 18px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #fff;
+            border-bottom: 2px solid var(--secondary-purple);
+        }
 
-    .chat-input {
-      display: flex;
-      padding: 14px;
-      background: #111;
-      border-top: 1px solid #333;
-    }
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-    input[type="text"] {
-      flex: 1;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: none;
-      background: #222;
-      color: #fff;
-      font-size: 1rem;
-    }
+        /* Custom Scrollbar for a clean look */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
 
-    input[type="text"]:focus {
-      outline: none;
-    }
+        .chat-messages::-webkit-scrollbar-track {
+            background: #111;
+        }
 
-    button {
-      background: #7a3cff;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      margin-left: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: var(--primary-purple);
+            border-radius: 4px;
+        }
 
-    button:hover {
-      background: #9e61ff;
-    }
-  </style>
+        .msg {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            word-wrap: break-word;
+        }
+
+        .user {
+            align-self: flex-end;
+            background: var(--tertiary-purple);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0d6ff;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0d6ff;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-style: italic;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 14px;
+            background: rgba(17, 17, 17, 0.7);
+            backdrop-filter: blur(5px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 18px;
+            border-radius: 25px;
+            border: none;
+            background: var(--input-bg);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-purple);
+        }
+
+        button {
+            background: var(--primary-purple);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin-left: 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(122, 60, 255, 0.2);
+        }
+
+        button:hover {
+            background: var(--secondary-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(158, 97, 255, 0.3);
+        }
+    </style>
 </head>
 <body>
 
-  <div class="chat-container">
-    <div class="chat-header">💬 FitVibe Bot</div>
-    <div class="chat-messages" id="chat-box">
-      <div class="msg bot">Hello. I am your fitness assistant. You may ask about diet, exercise, or recovery.</div>
+    <div class="chat-container">
+        <div class="chat-header">
+            💬 FitVibe AI
+        </div>
+        <div class="chat-messages" id="chat-box">
+            <div class="msg bot">Hello there! I'm your friendly fitness assistant. How can I help you today? Let's get you on the path to a healthier you! 💪</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Ask about diet, workout, or recovery..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
     </div>
-    <div class="chat-input">
-      <input type="text" id="userInput" placeholder="Type your question..." />
-      <button onclick="sendMessage()">Send</button>
-    </div>
-  </div>
 
-  <script>
-    const chatBox = document.getElementById("chat-box");
-    const input = document.getElementById("userInput");
+    <script>
+        const chatBox = document.getElementById("chat-box");
+        const input = document.getElementById("userInput");
 
-    const formalReplies = {
-      // DIET
-      "diet": "A balanced diet includes proteins, carbohydrates, fats, vitamins, and minerals in appropriate amounts.",
-      "protein": "Protein is essential for muscle repair and growth. Include sources like eggs, lentils, and lean meat.",
-      "carbs": "Carbohydrates are the body’s primary energy source. Prefer complex carbs like oats and brown rice.",
-      "sugar": "Excessive sugar intake should be avoided. Natural sugars from fruits are preferable.",
-      "calories": "Caloric intake should match your physical activity level and health goals.",
-      "junk food": "Junk food is generally high in calories and low in nutrients. It should be consumed minimally.",
-      "cheat day": "Occasional indulgence is acceptable, but it should not disrupt overall discipline.",
-      "breakfast": "Breakfast is important to start your metabolism and maintain energy throughout the day.",
-      "fasting": "Fasting can be effective if done correctly. Stay hydrated and ensure nutrient intake during eating windows.",
+        const replies = {
+            // DIET
+            "diet": ["A balanced diet is key! Make sure you get a mix of lean protein, healthy carbs, and good fats. 🥗", "Remember, nutrition is half the battle. Focus on whole foods and hydration.💧"],
+            "protein": ["Protein is essential for muscle repair and growth. Try to include sources like eggs, lentils, or lean chicken.🥚🍗", "Fuel your muscles! Protein from sources like beans, tofu, and fish helps them recover and grow.💪"],
+            "carbs": ["Carbs are your body's main fuel! Opt for complex carbs like oats, brown rice, and sweet potatoes for sustained energy.🔋", "Need energy for your workout? Carbs are your go-to! Choose whole grains over refined ones.🌾"],
+            "sugar": ["Try to cut back on added sugars. Sweeten things naturally with fruits instead! 🍓🍌", "Too much sugar can sabotage your goals. Stick to natural, unrefined sources when you have a craving.🍬🚫"],
+            "calories": ["Your caloric needs depend on your goals. Eating more helps you gain, and less helps you lose. It's all about balance!⚖️", "Calorie tracking can be a great tool. Make sure you're eating enough to fuel your body and reach your goals.🔢"],
+            "junk food": ["Junk food is okay in moderation, but it's best to keep it minimal for a healthy lifestyle.🍕", "Think of junk food as a treat, not a staple. It's high in calories but low in the nutrients your body needs.🍟"],
+            "cheat day": ["A 'cheat day' can help with motivation, but a 'treat meal' is a great way to stay on track. Enjoy it without guilt! 🎉", "It's all about consistency, not perfection. A small treat won't ruin your progress! 😊"],
+            "keto": ["The **keto diet** is a very low-carb, high-fat diet. It puts your body into a state called ketosis, where it burns fat for fuel. 🥑🥓", "A **ketogenic diet** focuses on fat and protein, while strictly limiting carbohydrates. It's used for weight loss and blood sugar management. "],
+            "vegan": ["A **vegan diet** excludes all animal products, including meat, dairy, and eggs. You'll get your protein from sources like beans, tofu, and nuts.🌱", "Going **vegan** means eating only plant-based foods. It can be great for health, but make sure you get enough B12 and iron!🥗"],
+            "weight loss": ["For **weight loss**, the key is a calorie deficit: burning more calories than you consume. Combine a healthy diet with regular exercise!🏃‍♀️", "To **lose weight**, focus on eating whole, unprocessed foods and staying active. It's a journey, so be patient and consistent.📈"],
+            "hydration": ["Stay hydrated! Drinking enough water is essential for performance, recovery, and overall health.💧", "Water is your best friend. Keep a water bottle with you all day long! 💦"],
 
-      // WORKOUT
-      "workout": "Regular exercise improves physical and mental health. Aim for at least 150 minutes per week.",
-      "gym": "The gym provides structured environments for strength and cardio training.",
-      "pushups": "Push-ups are a bodyweight exercise that strengthen the chest, arms, and core.",
-      "burpees": "Burpees are a high-intensity exercise that improve endurance and overall fitness.",
-      "cardio": "Cardio exercises improve cardiovascular health and help in weight management.",
-      "legs": "Leg training is essential for overall strength and stability.",
-      "abs": "Abdominal workouts strengthen core muscles but must be paired with proper diet for visible results.",
-      "strength": "Strength training builds muscle, boosts metabolism, and improves bone health.",
-      "planks": "Planks help build core endurance and stability.",
+            // WORKOUT
+            "workout": ["Let's get moving! Aim for a mix of strength training and cardio for a well-rounded routine.🤸‍♂️", "Regular exercise is amazing for both your body and mind! Find an activity you enjoy and stick with it.🏃‍♀️"],
+            "gym": ["The gym is a great place to build strength and push your limits! Don't be afraid to try new machines.🏋️‍♂️", "Lifting weights and doing cardio at the gym can seriously transform your fitness. Have fun with it!🔥"],
+            "pushups": ["**Push-ups** are a fantastic bodyweight exercise for your chest and arms. Remember to keep your core tight!🧱", "Want a stronger upper body? **Push-ups** are a classic for a reason. Start on your knees if you need to!👍"],
+            "burpees": ["**Burpees** are a full-body challenge! They'll get your heart rate up and build endurance. A tough one, but so effective!🥵", "Feeling a little sluggish? A few **burpees** will get your energy flowing! It's a great cardio and strength combo.💥"],
+            "cardio": ["**Cardio** is great for heart health and burning calories. Try running, cycling, or even dancing! ❤️", "Boost your endurance with some **cardio**. Even a brisk walk can make a difference!🚶‍♀️"],
+            "legs": ["Never skip leg day! Strong legs provide a great foundation for all other exercises.🦵", "Leg workouts can be tough, but they pay off big time. Squats and lunges are your best friends!🦵💪"],
+            "abs": ["Abs are made in the kitchen! While crunches strengthen your core, a healthy diet is key for definition.🥗", "A strong core is so important for stability. Planks and leg raises are great exercises for your abs.🛡️"],
+            "strength": ["**Strength training** builds muscle, which boosts your metabolism. Don't be afraid to lift heavy!🏋️‍♀️", "Want to feel powerful? **Strength training** is the way to go! It's so empowering to see yourself get stronger.✨"],
+            "planks": ["**Planks** are one of the best exercises for core strength. Hold it for as long as you can! ⏰", "Want a solid core? **Planks** are a simple but effective way to build stability and endurance.👍"],
+            "squats": ["**Squats** are a foundational exercise for building leg and core strength. Keep your back straight and your chest up!🏋️‍♂️", "To perform a **squat** properly, imagine you're sitting back into a chair. This protects your knees and works your glutes.🍑"],
+            "deadlifts": ["**Deadlifts** are a full-body exercise that builds immense strength in your back, legs, and core. Proper form is crucial! 💯", "A **deadlift** is one of the most effective exercises for building overall muscle. Start with a light weight and focus on technique.💡"],
+            "bench press": ["The **bench press** is a classic exercise for building chest, shoulder, and tricep strength. Always use a spotter!💪", "To master the **bench press**, focus on a full range of motion and controlled movements. Don't rush it. धीमी"],
+            
+            // RECOVERY
+            "rest": ["Rest is just as important as the workout itself. Give your muscles time to recover and rebuild!😴", "Don't push yourself too hard. A rest day is a sign of a smart athlete! Take it easy.🧘‍♂️"],
+            "sleep": ["Get your z's! 7-9 hours of **sleep** is crucial for muscle recovery and energy for the next day.😴", "Sleep is a superpower for fitness. It helps your body repair itself and re-energizes your mind.💤"],
+            "stretching": ["Flexibility is key! **Stretching** before and after a workout helps prevent injury and improves range of motion.🧘‍♀️", "A good stretch can do wonders for tight muscles. Don't forget to warm up and cool down!🧊"],
+            "injury": ["Listen to your body. If something hurts, stop immediately and rest. It's better to be safe than sorry.🩹", "Injuries happen, but a smart recovery can make all the difference. Don't rush back into it!👍"],
+            "overtraining": ["**Overtraining** can lead to burnout. Make sure you're scheduling rest days to avoid fatigue and injury.🚫", "Pushing too hard is a common mistake. Remember, consistency over intensity! 👍"],
+            "foam roll": ["**Foam rolling** is great for releasing muscle tension. Roll out those sore spots to improve your recovery!💆‍♀️", "Feeling tight? Grab a **foam roller**! It's like a deep tissue massage you can do at home.🏠"],
+            "recovery": ["**Recovery** is the secret ingredient to progress. Make sure you're resting, hydrating, and eating well.📈", "Your body needs time to heal. Prioritize recovery and you'll see better results in your workouts.🧘"],
+            
+            // MINDSET
+            "motivation": ["Motivation can come and go, but discipline is what keeps you going. Stay consistent!🔥", "Don't wait for motivation. Create a routine and the motivation will follow!🚀"],
+            "discipline": ["Discipline is the foundation of long-term success. It's about showing up even when you don't feel like it.💪", "Consistency is built on discipline. Make it a habit to prioritize your health every day.🗓️"],
+            "lazy": ["It's normal to feel lazy sometimes. Just get up and do one small thing, and the momentum will build!🚶‍♂️", "Don't let one bad day define you. Tomorrow is a new chance to start fresh!☀️"],
+            "goal": ["Set a clear goal for your fitness journey. It gives you a roadmap and something to work towards!🗺️", "Your goal is your purpose. Write it down and remind yourself of it every day!🎯"],
+            "focus": ["Stay focused on your routine to get the best results. A little bit of progress each day adds up!📈", "Focus on your form during exercises to prevent injury and get the most out of every rep.🎯"],
+            "consistency": ["Consistency is the real key to fitness success. It's not about what you do in one day, but what you do every day!🗓️", "Small steps, consistently taken, lead to big changes. You've got this!✅"],
+            "confidence": ["Confidence builds with every workout. Celebrate your progress, no matter how small!🎉", "As you get stronger, you'll feel more confident in and out of the gym. Keep it up!🌟"],
+            "routine": ["A routine helps you build healthy habits without having to think about it. Find one that works for you!✅", "Having a routine reduces stress and helps you stay on track. It's all about making it a habit!🗓️"],
 
-      // RECOVERY
-      "rest": "Rest is necessary for muscle recovery and overall well-being.",
-      "sleep": "7-9 hours of sleep is recommended for optimal recovery and performance.",
-      "stretching": "Stretching improves flexibility and reduces injury risk.",
-      "injury": "In case of injury, rest and consult a medical professional. Avoid stressing the affected area.",
-      "hydration": "Staying hydrated supports digestion, circulation, and temperature regulation.",
-      "overtraining": "Overtraining can lead to fatigue and injury. Schedule regular rest days.",
-      "foam roll": "Foam rolling helps release muscle tension and improve mobility.",
-      "recovery": "Recovery includes rest, hydration, nutrition, and light activity to aid healing.",
+            // FOODS
+            "chilli paratha": ["Chilli paratha is a high-calorie dish. It's fine as a treat, but be mindful of your portion size! 🌶️", "Enjoy your chili paratha, but remember to balance it with lighter, nutrient-rich meals later.🍽️"],
+            "paratha": ["Parathas can be energy-dense. They're a good source of carbs, but moderation is key if you're watching your weight.⚖️", "You can make parathas healthier by using whole wheat flour and a minimal amount of oil!🌾"],
+            "paneer": ["Paneer is a great source of protein, especially for vegetarians! It's delicious and helps build muscle.🧀", "Looking for a protein boost? Paneer is an excellent choice! It's versatile and packed with nutrients.✅"],
+            "milk": ["Milk is rich in calcium and vitamin D, which are essential for strong bones. A great post-workout drink!🥛", "Milk is a classic. It's a good source of protein and can help with muscle recovery. 💪"],
+            "rice": ["Rice is a fantastic energy source. Opt for brown rice over white for added fiber and nutrients!🌾", "Rice is a staple in many diets. It's a great source of carbs to fuel your workouts!🍚"],
+            "chicken": ["Chicken is a lean protein powerhouse! It's essential for building and repairing muscle tissue.🍗", "Chicken is a go-to for many fitness enthusiasts because it's high in protein and low in fat. Excellent choice!✅"],
 
-      // MINDSET
-      "motivation": "Motivation may fluctuate, but consistency leads to progress.",
-      "discipline": "Discipline ensures long-term success in health and fitness.",
-      "lazy": "Lack of motivation is normal occasionally. Resume activity as soon as possible.",
-      "goal": "Having a clear fitness goal provides direction and purpose to your routine.",
-      "focus": "Stay focused on your routine to achieve better results.",
-      "consistency": "Consistent effort is key to achieving and maintaining fitness.",
-      "confidence": "Confidence improves with progress and self-awareness.",
-      "routine": "A consistent routine builds habits and reduces decision fatigue.",
+            // GENERAL
+            "hello": ["Hey there! What's on your mind today? Let's talk fitness!👋", "Hey! Ready to talk about your fitness goals? I'm here to help. 😊"],
+            "hi": ["Hello! What can I assist you with today? Feel free to ask anything about fitness or diet.💪", "Hi! I'm here to help you get fitter and healthier. What's your first question?🤔"],
+            "how are you": ["I'm doing great, thanks for asking! Ready to help you crush your fitness goals.🚀", "I'm an AI, so I don't have feelings, but I'm ready to assist you! How can I help?🤖"],
+            "thanks": ["You're welcome! Happy to help. 😊", "Anytime! Let me know if you have more questions.👍"],
+            "bye": ["Goodbye! Stay fit and healthy! 💪", "Catch you later! Keep up the great work. 👋"]
+        };
 
-      // GENERAL GREETING
-      "hi": "Hello. How can I assist you today?",
-      "hello": "Greetings. Please type your question.",
-      "chilli paratha": "That is a high-calorie food. Ensure it fits within your daily intake if consumed.",
-      "paratha": "Parathas are energy-dense. Moderate consumption is recommended if you're managing weight."
-    };
-
-    function appendMessage(content, sender) {
-      const msg = document.createElement("div");
-      msg.className = `msg ${sender}`;
-      msg.textContent = content;
-      chatBox.appendChild(msg);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    function botReply(userText) {
-      const text = userText.toLowerCase();
-      let found = false;
-
-      for (const keyword in formalReplies) {
-        if (text.includes(keyword)) {
-          found = true;
-          setTimeout(() => {
-            appendMessage(formalReplies[keyword], "bot");
-          }, 600);
-          break;
+        function appendMessage(content, sender) {
+            const msg = document.createElement("div");
+            msg.className = `msg ${sender}`;
+            msg.textContent = content;
+            chatBox.appendChild(msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
-      }
 
-      if (!found) {
-        setTimeout(() => {
-          appendMessage("I'm not sure I understand that. Please rephrase or ask a related question.", "bot");
-        }, 600);
-      }
-    }
-
-    function sendMessage() {
-      const text = input.value.trim();
-      if (text === "") return;
-      appendMessage(text, "user");
-      input.value = "";
-      botReply(text);
-    }
-
-    input.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") sendMessage();
-    });
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        function showTypingIndicator() {
+            const indicator = document.createElement("div");
+            indicator.className = "typing-indicator";
+            indicator.textContent = "typing...";
+            chatBox.appendChild(indicator);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.querySelector(".typing-indicator");
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        function botReply(userText) {
+            const text = userText.toLowerCase();
+            let found = false;
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            setTimeout(() => {
+                removeTypingIndicator();
+                
+                // Find a relevant reply based on keywords
+                for (const keyword in replies) {
+                    if (text.includes(keyword)) {
+                        found = true;
+                        // Get a random reply from the array for variety
+                        const replyArray = replies[keyword];
+                        const randomReply = replyArray[Math.floor(Math.random() * replyArray.length)];
+                        appendMessage(randomReply, "bot");
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    appendMessage("I'm not sure I understand that. Try asking about a specific topic like 'protein', 'workout', or 'sleep'. 🤔", "bot");
+                }
+            }, 1500); // Wait for 1.5 seconds to simulate typing
+        }
+
+        function sendMessage() {
+            const text = input.value.trim();
+            if (text === "") return;
+
+            appendMessage(text, "user");
+            input.value = "";
+            botReply(text);
+        }
+
+        input.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") sendMessage();
+        });
+    </script>
 </body>
 </html>

@@ -41,8 +41,19 @@
       border-radius: 8px;
       margin-left: 10px;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
 
+    button:hover {
+        background-color: #b19cd9;
+        transform: translateY(-2px);
+    }
+    
+    button:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+    
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -75,6 +86,17 @@
       font-weight: bold;
     }
 
+    .like-btn:hover {
+        background-color: #e55ba0;
+        transform: translateY(-2px);
+    }
+    
+    .like-btn:disabled {
+        background-color: #e55ba0;
+        cursor: not-allowed;
+        transform: none;
+    }
+
     .like-count {
       margin-top: 5px;
       color: lavender;
@@ -92,10 +114,81 @@
   </div>
 
   <div class="gallery" id="gallery">
-    <!-- Uploaded images will appear here -->
-  </div>
+    </div>
 
   <script>
+    // Key for storing data in localStorage
+    const STORAGE_KEY = 'fitvibe_selfies';
+    
+    // Function to load data from localStorage
+    function loadSelfies() {
+        try {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        } catch (error) {
+            console.error("Failed to load selfies from localStorage:", error);
+            return [];
+        }
+    }
+
+    // Function to save data to localStorage
+    function saveSelfies(selfies) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(selfies));
+        } catch (error) {
+            console.error("Failed to save selfies to localStorage:", error);
+        }
+    }
+
+    // Function to render the gallery from the data array
+    function renderGallery() {
+        const gallery = document.getElementById('gallery');
+        gallery.innerHTML = ''; // Clear the current gallery
+        const selfies = loadSelfies();
+
+        // Sort by most recent (newest first)
+        selfies.sort((a, b) => b.id - a.id);
+        
+        selfies.forEach(selfie => {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const img = document.createElement('img');
+            img.src = selfie.imageSrc;
+
+            const likeBtn = document.createElement('button');
+            likeBtn.className = 'like-btn';
+            likeBtn.textContent = '❤️ Like';
+
+            const likeCount = document.createElement('div');
+            likeCount.className = 'like-count';
+            likeCount.textContent = `${selfie.likes} like${selfie.likes === 1 ? '' : 's'}`;
+
+            // Add an event listener to the like button
+            likeBtn.addEventListener('click', () => {
+                // Find the selfie in the data and increment its likes
+                const updatedSelfies = loadSelfies();
+                const index = updatedSelfies.findIndex(s => s.id === selfie.id);
+                if (index !== -1) {
+                    updatedSelfies[index].likes++;
+                    saveSelfies(updatedSelfies); // Save the updated data
+                    renderGallery(); // Re-render the gallery to show the new count
+                }
+            });
+            
+            // Disable the button to prevent multiple likes per session
+            likeBtn.disabled = true;
+            likeBtn.textContent = '🔥 Liked';
+
+            card.appendChild(img);
+            card.appendChild(likeBtn);
+            card.appendChild(likeCount);
+
+            gallery.appendChild(card);
+        });
+    }
+
+    // Function to handle image upload
     function uploadImage() {
       const input = document.getElementById('imageInput');
       const file = input.files[0];
@@ -103,41 +196,27 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          const gallery = document.getElementById('gallery');
-
-          const card = document.createElement('div');
-          card.className = 'card';
-
-          const img = document.createElement('img');
-          img.src = e.target.result;
-
-          const likeBtn = document.createElement('button');
-          likeBtn.className = 'like-btn';
-          likeBtn.textContent = '❤️ Like';
-
-          const likeCount = document.createElement('div');
-          likeCount.className = 'like-count';
-          likeCount.textContent = '0 likes';
-
-          let count = 0;
-          likeBtn.addEventListener('click', () => {
-            count++;
-            likeCount.textContent = count + ' like' + (count === 1 ? '' : 's');
-            likeBtn.textContent = '🔥 Liked';
-            likeBtn.disabled = true;
-          });
-
-          card.appendChild(img);
-          card.appendChild(likeBtn);
-          card.appendChild(likeCount);
-
-          gallery.prepend(card); // Show newest first
+          const newSelfie = {
+              // Create a unique ID using the current timestamp
+              id: Date.now(), 
+              imageSrc: e.target.result,
+              likes: 0
+          };
+          
+          const selfies = loadSelfies();
+          selfies.push(newSelfie);
+          saveSelfies(selfies); // Save the new selfie
+          
+          renderGallery(); // Re-render to show the new image
         };
         reader.readAsDataURL(file);
       } else {
         alert('Please select a photo to upload!');
       }
     }
+    
+    // Load the gallery when the page first loads
+    document.addEventListener('DOMContentLoaded', renderGallery);
   </script>
 </body>
 </html>

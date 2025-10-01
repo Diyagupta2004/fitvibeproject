@@ -1,188 +1,442 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FitVibe: Yoga Pose Timer</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitVibe: Yoga Hold Challenge</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-    html, body {
-      height: 100%;
-      background-color: #0d0d0d;
-      color: #00ffcc;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        :root {
+            --neon-purple: #9d00ff; /* Main purple glow */
+            --neon-pink: #e065e0; /* Secondary pink for contrast */
+            --dark-bg: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --red-warning: #ff4d4d;
+        }
 
-    .game-container {
-      width: 95%;
-      max-width: 480px;
-      background: #1a1a1a;
-      padding: 1.2rem;
-      border-radius: 20px;
-      box-shadow: 0 0 15px #00ffcc;
-      text-align: center;
-      min-height: 480px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    img {
-      width: 200px;
-      height: 200px;
-      object-fit: contain; /* ensures full image is shown without cropping */
-      border-radius: 10px;
-      margin: 0.5rem auto;
-      display: block;
-      background-color: #000; /* fallback for transparent edges */
-    }
+        body {
+            height: 100vh;
+            background: var(--dark-bg);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-    h1 {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
-    }
+        /* Neon glow effect - now purple */
+        .glow {
+            animation: pulseGlow 1.5s infinite alternate;
+        }
 
-    p {
-      font-size: 0.9rem;
-    }
+        @keyframes pulseGlow {
+            from {
+                text-shadow: 0 0 5px var(--neon-purple), 0 0 10px var(--neon-purple), 0 0 15px var(--neon-purple);
+                box-shadow: 0 0 5px var(--neon-purple), 0 0 15px var(--neon-purple);
+            }
+            to {
+                text-shadow: 0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple), 0 0 30px var(--neon-purple);
+                box-shadow: 0 0 10px var(--neon-purple), 0 0 25px var(--neon-purple);
+            }
+        }
 
-    #timer {
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin: 0.8rem 0;
-    }
+        .game-container {
+            width: 95%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 25px;
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.4); /* Purple shadow */
+            text-align: center;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
 
-    button {
-      background-color: #00ffcc;
-      color: #000;
-      padding: 0.6rem 1.5rem;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--neon-pink); /* Using pink for main heading contrast */
+            text-transform: uppercase;
+        }
 
-    button:hover {
-      background-color: #00cca3;
-    }
+        .info-section {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
 
-    #pose-quote {
-      font-style: italic;
-      color: #ccc;
-      min-height: 30px;
-      font-size: 0.9rem;
-    }
+        .info-section p {
+            color: var(--neon-purple);
+        }
 
-    #pose-name {
-      min-height: 30px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-top: 0.5rem;
-    }
+        .info-section span {
+            color: #fff;
+        }
+        
+        #pose-display {
+            display: none; /* Hidden on initial load */
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
 
-    #message {
-      min-height: 30px;
-      font-size: 0.9rem;
-      color: #ffffff;
-    }
-  </style>
+        #pose-image {
+            width: 250px;
+            height: 250px;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(157, 0, 255, 0.2); /* Purple shadow */
+            transition: transform 0.3s ease;
+        }
+
+        #pose-image.pulse {
+            animation: imagePulse 1s infinite;
+        }
+
+        @keyframes imagePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        #pose-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--neon-pink);
+            transition: color 0.3s;
+        }
+
+        #pose-quote {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .timer-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #timer {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--neon-purple);
+            text-shadow: 0 0 10px var(--neon-purple);
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        #timer.warning {
+            color: var(--red-warning);
+            text-shadow: 0 0 10px var(--red-warning);
+        }
+
+        #message {
+            min-height: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+        }
+        
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            text-align: center;
+        }
+        
+        #start-screen h2 {
+            font-size: 1.8rem;
+            color: var(--neon-pink);
+            margin-bottom: 0.5rem;
+        }
+
+        .difficulty-options {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .difficulty-options button {
+            background-color: transparent;
+            color: var(--neon-purple);
+            border: 2px solid var(--neon-purple);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .difficulty-options button:hover,
+        .difficulty-options button.active {
+            background-color: var(--neon-purple);
+            color: var(--dark-bg);
+            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.5);
+        }
+
+        .btn {
+            background-color: var(--neon-purple);
+            color: var(--dark-bg);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.3); /* Purple shadow */
+        }
+
+        .btn:hover {
+            background-color: #7a00cc;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(157, 0, 255, 0.5); /* Purple shadow */
+        }
+
+        .btn:disabled {
+            background-color: #333;
+            color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background-color: var(--card-bg);
+            color: var(--neon-purple);
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.3); /* Purple shadow */
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--neon-purple);
+            color: var(--dark-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(157, 0, 255, 0.5); /* Purple shadow */
+        }
+    </style>
 </head>
 <body>
-  <div class="game-container">
-    <div>
-      <h1>🧘‍♂️ FitVibe Yoga Hold</h1>
-      <p>Hold the following yoga posture for the given time to train your body and mind.</p>
+    <div class="game-container">
+        <header>
+            <h1 class="glow">FitVibe Yoga Hold</h1>
+        </header>
+
+        <div class="info-section">
+            <p>Score: <span id="score">0</span></p>
+            <p>High Score: <span id="high-score">0</span></p>
+        </div>
+
+        <div id="start-screen">
+            <h2>Yoga Challenge</h2>
+            <p>Select your difficulty level to begin.</p>
+            <div class="difficulty-options">
+                <button class="btn" data-difficulty="easy">Easy</button>
+                <button class="btn" data-difficulty="medium">Medium</button>
+                <button class="btn" data-difficulty="hard">Hard</button>
+            </div>
+        </div>
+
+        <div id="pose-display">
+            <h2 id="pose-name"></h2>
+            <img id="pose-image" src="" alt="Yoga Pose" />
+            <p id="pose-quote"></p>
+        </div>
+
+        <div class="timer-section">
+            <div id="timer"></div>
+            <p id="message"></p>
+        </div>
+
+        <div class="button-group">
+            <button id="startButton" class="btn" style="display: none;">Start</button>
+        </div>
     </div>
 
-    <div>
-      <h2 id="pose-name"></h2>
-      <img id="pose-image" src="" alt="Yoga Pose" />
-      <p id="pose-quote"></p>
-    </div>
+    <audio id="beepSound" src="https://www.soundjay.com/button/beep-07a.mp3" preload="auto"></audio>
+    <audio id="warningSound" src="https://www.soundjay.com/button/button-10.mp3" preload="auto"></audio>
+    <audio id="successSound" src="https://www.soundjay.com/button/button-20.mp3" preload="auto"></audio>
 
-    <div>
-      <div id="timer">30</div>
-      <button onclick="startTimer()">Start Holding</button>
-      <p id="message"></p>
-    </div>
-  </div>
+    <script>
+        const poses = [
+            {
+                name: "Tree Pose (Vrikshasana)",
+                image: "tree.jpg.jpeg",
+                quote: "Stand tall, root deep, and balance like a tree.",
+                duration: { easy: 20, medium: 30, hard: 45 }
+            },
+            {
+                name: "Warrior II (Virabhadrasana II)",
+                image: "warrior.jpg.jpeg",
+                quote: "Channel your inner strength and stand your ground.",
+                duration: { easy: 25, medium: 35, hard: 50 }
+            },
+            {
+                name: "Cobra Pose (Bhujangasana)",
+                image: "cobra.jpg.jpeg",
+                quote: "Rise up, open your heart, and breathe with strength.",
+                duration: { easy: 15, medium: 25, hard: 40 }
+            },
+            {
+                name: "Downward Dog (Adho Mukha Svanasana)",
+                image: "downwarddog.jpg.jpeg",
+                quote: "Feel the stretch and let go of all tension.",
+                duration: { easy: 30, medium: 45, hard: 60 }
+            },
+            {
+                name: "Child’s Pose (Balasana)",
+                image: "childpose.jpg.jpeg",
+                quote: "Rest, reset, and restore your energy.",
+                duration: { easy: 10, medium: 20, hard: 30 }
+            }
+        ];
 
-  <script>
-    const poses = [
-      {
-        name: "Tree Pose (Vrikshasana)",
-        image: "tree.jpg.jpeg",
-        quote: "Stand tall, root deep, and balance like a tree."
-      },
-      {
-        name: "Warrior II (Virabhadrasana II)",
-        image: "warrior.jpg.jpeg",
-        quote: "Channel your inner strength and stand your ground."
-      },
-      {
-        name: "Cobra Pose (Bhujangasana)",
-        image: "cobra.jpg.jpeg",
-        quote: "Rise up, open your heart, and breathe with strength."
-      },
-      {
-        name: "Downward Dog (Adho Mukha Svanasana)",
-        image: "downwarddog.jpg.jpeg",
-        quote: "Feel the stretch and let go of all tension."
-      },
-      {
-        name: "Child’s Pose (Balasana)",
-        image: "childpose.jpg.jpeg",
-        quote: "Rest, reset, and restore your energy."
-      }
-    ];
+        const timerDisplay = document.getElementById("timer");
+        const poseNameDisplay = document.getElementById("pose-name");
+        const poseImage = document.getElementById("pose-image");
+        const poseQuoteDisplay = document.getElementById("pose-quote");
+        const messageDisplay = document.getElementById("message");
+        const startButton = document.getElementById("startButton");
+        const scoreDisplay = document.getElementById("score");
+        const highScoreDisplay = document.getElementById("high-score");
+        const startScreen = document.getElementById("start-screen");
+        const poseDisplay = document.getElementById("pose-display");
+        const difficultyButtons = document.querySelectorAll('.difficulty-options button');
 
-    let timeLeft = 30;
-    let timerInterval;
+        const beepSound = document.getElementById("beepSound");
+        const warningSound = document.getElementById("warningSound");
+        const successSound = document.getElementById("successSound");
 
-    function getRandomPose() {
-      const index = Math.floor(Math.random() * poses.length);
-      return poses[index];
-    }
+        let timeLeft;
+        let timerInterval;
+        let score = 0;
+        let highScore = localStorage.getItem('yogaHighScore') || 0;
+        let currentDifficulty = 'easy'; // Default difficulty
 
-    function startTimer() {
-      const pose = getRandomPose();
-      document.getElementById("pose-name").innerText = pose.name;
-      document.getElementById("pose-image").src = pose.image;
-      document.getElementById("pose-image").alt = pose.name;
-      document.getElementById("pose-quote").innerText = pose.quote;
-      document.getElementById("message").innerText = "Hold the pose! 🧘‍♀️";
-      document.getElementById("timer").innerText = timeLeft;
+        highScoreDisplay.textContent = highScore;
 
-      clearInterval(timerInterval);
-
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById("timer").innerText = timeLeft;
-
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          document.getElementById("message").innerText = "🎉 Great job! You held the pose!";
-          timeLeft = 30;
+        function getRandomPose() {
+            const index = Math.floor(Math.random() * poses.length);
+            return poses[index];
         }
-      }, 1000);
-    }
 
-    // Load a random pose initially
-    window.onload = () => {
-      const pose = getRandomPose();
-      document.getElementById("pose-name").innerText = pose.name;
-      document.getElementById("pose-image").src = pose.image;
-      document.getElementById("pose-image").alt = pose.name;
-      document.getElementById("pose-quote").innerText = pose.quote;
-    };
-  </script>
+        function playSound(sound) {
+            sound.currentTime = 0;
+            sound.play();
+        }
+
+        function updateUI(pose) {
+            poseNameDisplay.innerText = pose.name;
+            poseImage.src = pose.image;
+            poseImage.alt = pose.name;
+            poseQuoteDisplay.innerText = pose.quote;
+            timerDisplay.textContent = timeLeft;
+            messageDisplay.textContent = "Get ready...";
+            timerDisplay.classList.remove("warning");
+        }
+
+        function startTimer() {
+            startButton.disabled = true;
+            startButton.textContent = "Holding...";
+            messageDisplay.textContent = "Hold the pose! 🧘‍♀️";
+            
+            const currentPose = getRandomPose();
+            timeLeft = currentPose.duration[currentDifficulty]; // Set duration based on difficulty
+            updateUI(currentPose);
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+                poseImage.classList.add('pulse');
+
+                if (timeLeft <= 5 && timeLeft > 0) {
+                    timerDisplay.classList.add('warning');
+                    playSound(warningSound);
+                } else if (timeLeft % 5 === 0 && timeLeft > 0) {
+                    playSound(beepSound);
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    playSound(successSound);
+                    messageDisplay.textContent = "🎉 Great job! You held the pose!";
+                    score++;
+                    scoreDisplay.textContent = score;
+
+                    if (score > highScore) {
+                        highScore = score;
+                        highScoreDisplay.textContent = highScore;
+                        localStorage.setItem('yogaHighScore', highScore);
+                    }
+
+                    startButton.textContent = "Next Pose";
+                    startButton.disabled = false;
+                    timerDisplay.classList.remove('warning');
+                    poseImage.classList.remove('pulse');
+                }
+            }, 1000);
+        }
+
+        function showGameScreen() {
+            startScreen.style.display = 'none';
+            poseDisplay.style.display = 'flex';
+            startButton.style.display = 'block';
+            startButton.textContent = 'Start Holding';
+        }
+
+        difficultyButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                // Remove active class from all buttons
+                difficultyButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to the clicked button
+                e.target.classList.add('active');
+                
+                currentDifficulty = e.target.dataset.difficulty;
+                showGameScreen();
+                startTimer();
+            });
+        });
+
+        startButton.addEventListener('click', startTimer);
+
+        // Initial setup on load
+        window.onload = () => {
+            // No initial pose displayed, show start screen instead
+            poseDisplay.style.display = 'none';
+            startScreen.style.display = 'flex';
+            timerDisplay.textContent = '';
+            messageDisplay.textContent = 'Select a difficulty to begin.';
+        };
+    </script>
 </body>
 </html>

@@ -1,332 +1,745 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - FitVibe</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FitVibe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-    * {
-      box-sizing: border-box;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: #121212;
-      color: #e6e6fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: #e6e6fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
 
-    .login-container {
-      background-color: #1f1f1f;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 0 30px rgba(177, 156, 217, 0.15);
-      width: 100%;
-      max-width: 400px;
-    }
+        .login-container {
+            background-color: #1f1f1f;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(177, 156, 217, 0.15);
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            z-index: 10;
+        }
 
-    .login-container h2 {
-      color: #b19cd9;
-      font-size: 2rem;
-      margin-bottom: 10px;
-      text-align: center;
-    }
+        .login-container h2 {
+            color: #b19cd9;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
 
-    .login-container p {
-      color: #aaa;
-      margin-bottom: 25px;
-      font-size: 0.95rem;
-      text-align: center;
-    }
+        .login-container p {
+            color: #aaa;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            text-align: center;
+        }
 
-    .input-wrapper {
-      position: relative;
-      margin-bottom: 15px;
-    }
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
 
-    .input-wrapper input {
-      width: 100%;
-      padding: 12px 40px 12px 12px;
-      border: 1px solid #333;
-      border-radius: 8px;
-      background-color: #2c2c2c;
-      color: #e6e6fa;
-      transition: border 0.3s ease;
-      font-size: 1rem;
-    }
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 40px 12px 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background-color: #2c2c2c;
+            color: #e6e6fa;
+            transition: border 0.3s ease;
+            font-size: 1rem;
+        }
 
-    .input-wrapper input:focus {
-      outline: none;
-      border-color: #b19cd9;
-      box-shadow: 0 0 5px rgba(177, 156, 217, 0.5);
-    }
+        .input-wrapper input::placeholder {
+            color: #999;
+        }
 
-    .toggle-password {
-      position: absolute;
-      top: 50%;
-      right: 12px;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #aaa;
-      font-size: 1rem;
-    }
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #b19cd9;
+            box-shadow: 0 0 5px rgba(177, 156, 217, 0.5);
+        }
 
-    .remember-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-      color: #aaa;
-    }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #aaa;
+            font-size: 1rem;
+        }
 
-    .remember-container input[type="checkbox"] {
-      margin: 0;
-      width: 16px;
-      height: 16px;
-      accent-color: #b19cd9;
-    }
+        .toggle-password:hover {
+            color: #b19cd9;
+        }
+        
+        /* Password Requirement Section */
+        .password-requirements {
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: -5px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #ccc;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
 
-    button {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(to right, #b19cd9, #a188c8);
-      color: #121212;
-      font-weight: 600;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
+        .password-requirements.show {
+            opacity: 1;
+            max-height: 150px;
+        }
+        
+        .password-requirements ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-    button:hover {
-      background: linear-gradient(to right, #a188c8, #b19cd9);
-    }
+        .password-requirements li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
 
-    .or-container {
-      margin: 25px 0 15px;
-      display: flex;
-      align-items: center;
-      text-align: center;
-      color: #666;
-      font-size: 0.85rem;
-    }
+        .password-requirements li .fa-check {
+            color: #4CAF50;
+            display: none;
+        }
+        
+        .password-requirements li .fa-times {
+            color: #f44336;
+            display: inline-block;
+        }
 
-    .or-container::before,
-    .or-container::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid #333;
-    }
+        .password-requirements li.valid .fa-check {
+            display: inline-block;
+        }
+        
+        .password-requirements li.valid .fa-times {
+            display: none;
+        }
 
-    .or-container span {
-      margin: 0 10px;
-    }
+        .remember-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
 
-    .google-btn button {
-      background-color: #333;
-      color: #e6e6fa;
-      border: 1px solid #555;
-      margin-top: 10px;
-    }
+        .remember-container input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #555;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
 
-    .google-btn button:hover {
-      background-color: #444;
-    }
+        .remember-container input[type="checkbox"]:checked {
+            background-color: #b19cd9;
+            border-color: #b19cd9;
+        }
 
-    .signup-link {
-      margin-top: 20px;
-      font-size: 0.9rem;
-      text-align: center;
-    }
+        .remember-container input[type="checkbox"]:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: #1f1f1f;
+            font-size: 12px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
-    .signup-link a {
-      color: #b19cd9;
-      text-decoration: none;
-    }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, #b19cd9, #a188c8);
+            color: #121212;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .signup-link a:hover {
-      text-decoration: underline;
-    }
+        button:hover {
+            background: linear-gradient(to right, #a188c8, #b19cd9);
+            transform: translateY(-1px);
+        }
 
-    .forgot-password {
-      text-align: center;
-      font-size: 0.85rem;
-      margin-top: 10px;
-    }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-    .forgot-password a {
-      color: #b19cd9;
-      text-decoration: none;
-    }
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #121212;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
 
-    .forgot-password a:hover {
-      text-decoration: underline;
-    }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
 
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: #a188c8;
-      color: #121212;
-      padding: 14px 24px;
-      border-radius: 8px;
-      opacity: 0;
-      transform: translateX(100%);
-      transition: all 0.5s ease;
-      z-index: 1000;
-    }
+        .or-container {
+            margin: 25px 0 15px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #666;
+            font-size: 0.85rem;
+        }
 
-    .notification.show {
-      opacity: 1;
-      transform: translateX(0);
-    }
+        .or-container::before,
+        .or-container::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #333;
+        }
 
-    .google-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #1f1f1f;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(177, 156, 217, 0.3);
-      display: none;
-      z-index: 2000;
-    }
+        .or-container span {
+            margin: 0 10px;
+        }
 
-    .google-popup h3 {
-      margin-top: 0;
-      margin-bottom: 15px;
-      color: #b19cd9;
-    }
+        .google-btn button {
+            background-color: #333;
+            color: #e6e6fa;
+            border: 1px solid #555;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
 
-    .google-option {
-      padding: 10px 15px;
-      margin-bottom: 10px;
-      background-color: #2c2c2c;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      color: #e6e6fa;
-    }
+        .google-btn button:hover {
+            background-color: #444;
+        }
 
-    .google-option:hover {
-      background-color: #3a3a3a;
-    }
-  </style>
+        .signup-link {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .signup-link a {
+            color: #b19cd9;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        .forgot-password {
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .forgot-password a {
+            color: #b19cd9;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 14px 24px;
+            border-radius: 8px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s ease;
+            z-index: 1000;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .notification.error {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .google-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1f1f1f;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(177, 156, 217, 0.3);
+            display: none;
+            z-index: 2000;
+        }
+
+        .google-popup h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #b19cd9;
+            text-align: center;
+        }
+
+        .google-option {
+            padding: 12px 18px;
+            margin-bottom: 10px;
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            color: #e6e6fa;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .google-option:hover {
+            background-color: #3a3a3a;
+        }
+
+        .google-option .fab {
+            color: #b19cd9;
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #b19cd9;
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .back-home:hover {
+            color: #a188c8;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <div class="login-container">
-    <h2>FitVibe</h2>
+    <a href="fitvibe.html" class="back-home">
+        <i class="fas fa-arrow-left"></i>
+        Back to Home
+    </a>
 
-    <form id="loginForm">
-      <div class="input-wrapper">
-        <input type="email" id="email" placeholder="Email" required>
-      </div>
+    <div class="login-container">
+        <h2>FitVibe</h2>
+        <p>Welcome back! Please sign in to your account.</p>
 
-      <div class="input-wrapper">
-        <input type="password" id="password" placeholder="Password" required>
-        <i class="fa-solid fa-eye toggle-password" id="togglePassword" aria-hidden="true"></i>
-      </div>
+        <form id="loginForm">
+            <div class="input-wrapper">
+                <input type="email" id="email" placeholder="Email" required autocomplete="email">
+                <div class="error-message" id="emailError"></div>
+            </div>
 
-      <div class="remember-container">
-        <input type="checkbox" id="remember">
-        <label for="remember">Remember me</label>
-      </div>
+            <div class="input-wrapper">
+                <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+                <i class="fa-solid fa-eye toggle-password" id="togglePassword" aria-hidden="true"></i>
+                <div class="error-message" id="passwordError"></div>
+            </div>
 
-      <button type="submit">Login</button>
-    </form>
+            <div id="passwordRequirements" class="password-requirements">
+                <p>Password must contain:</p>
+                <ul>
+                    <li id="reqLength"><i class="fas fa-times"></i><i class="fas fa-check"></i> At least 8 characters</li>
+                    <li id="reqUpper"><i class="fas fa-times"></i><i class="fas fa-check"></i> An uppercase letter</li>
+                    <li id="reqLower"><i class="fas fa-times"></i><i class="fas fa-check"></i> A lowercase letter</li>
+                    <li id="reqNumber"><i class="fas fa-times"></i><i class="fas fa-check"></i> A number</li>
+                    <li id="reqSpecial"><i class="fas fa-times"></i><i class="fas fa-check"></i> A special character</li>
+                </ul>
+            </div>
+            
+            <div class="remember-container">
+                <input type="checkbox" id="remember">
+                <label for="remember">Remember me</label>
+            </div>
 
-    <div class="forgot-password">
-      <a href="forget.html">Forgot Password?</a>
+            <button type="submit" id="loginBtn">
+                <span class="btn-text">Login</span>
+            </button>
+        </form>
+
+        <div class="forgot-password">
+            <a href="forget.html">Forgot Password?</a>
+        </div>
+
+        <div class="or-container">
+            <span>OR</span>
+        </div>
+
+        <div class="google-btn">
+            <button type="button" onclick="showGooglePopup()">
+                <i class="fab fa-google"></i>
+                Login with Google
+            </button>
+        </div>
+
+        <div class="signup-link">
+            Don't have an account? <a href="sign.html">Sign up</a>
+        </div>
     </div>
 
-    <div class="or-container">
-      <span>OR</span>
+    <div class="notification" id="notification"></div>
+
+    <div class="google-popup" id="googlePopup">
+        <h3>Select a Google account</h3>
+        <div class="google-option" onclick="loginAs('diya@gmail.com')">
+            <i class="fab fa-google"></i>
+            diya@gmail.com
+        </div>
+        <div class="google-option" onclick="loginAs('ghanisha@gmail.com')">
+            <i class="fab fa-google"></i>
+            ghanisha@gmail.com
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button type="button" onclick="closeGooglePopup()" style="background: #333; color: #aaa; padding: 8px 16px; font-size: 0.9rem;">Cancel</button>
+        </div>
     </div>
 
-    <div class="google-btn">
-      <button onclick="showGooglePopup()">Login with Google</button>
-    </div>
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+        
+        const form = document.getElementById("loginForm");
+        const notification = document.getElementById("notification");
+        const passwordInput = document.getElementById("password");
+        const emailInput = document.getElementById("email");
+        const togglePassword = document.getElementById("togglePassword");
+        const googlePopup = document.getElementById("googlePopup");
+        const loginBtn = document.getElementById("loginBtn");
+        const btnText = loginBtn.querySelector('.btn-text');
+        const passwordRequirements = document.getElementById('passwordRequirements');
 
-    <div class="signup-link">
-      Don't have an account? <a href="sign.html">Sign up</a>
-    </div>
-  </div>
+        function validateEmail(email) {
+            const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+            return emailRegex.test(email);
+        }
 
-  <div class="notification" id="notification">Logged in successfully!</div>
+        function validatePassword(password) {
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(password)
+            };
+            return {
+                valid: Object.values(requirements).every(Boolean),
+                requirements: requirements
+            };
+        }
+        
+        function updatePasswordRequirementsUI(password) {
+            const reqs = validatePassword(password).requirements;
+            document.getElementById('reqLength').classList.toggle('valid', reqs.length);
+            document.getElementById('reqUpper').classList.toggle('valid', reqs.uppercase);
+            document.getElementById('reqLower').classList.toggle('valid', reqs.lowercase);
+            document.getElementById('reqNumber').classList.toggle('valid', reqs.number);
+            document.getElementById('reqSpecial').classList.toggle('valid', reqs.special);
+        }
 
-  <div class="google-popup" id="googlePopup">
-    <h3>Select a Google account</h3>
-    <div class="google-option" onclick="loginAs('diya@gmail.com')">diya@gmail.com</div>
-    <div class="google-option" onclick="loginAs('ghanisha@gmail.com')">ghanisha@gmail.com</div>
-  </div>
+        function validateForm() {
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            let isValid = true;
+            let passwordCheck = {};
 
-  <script>
-    const form = document.getElementById("loginForm");
-    const notification = document.getElementById("notification");
-    const passwordInput = document.getElementById("password");
-    const togglePassword = document.getElementById("togglePassword");
-    const googlePopup = document.getElementById("googlePopup");
+            document.getElementById('emailError').style.display = 'none';
+            document.getElementById('passwordError').style.display = 'none';
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = passwordInput.value;
+            if (!email) {
+                showFieldError('emailError', 'Email is required');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showFieldError('emailError', 'Please enter a valid email address.');
+                isValid = false;
+            }
 
-      // Fetch users from localStorage
-      const users = JSON.parse(localStorage.getItem("fitvibe_users")) || [];
-      const user = users.find(u => u.email === email && u.password === password);
+            if (!password) {
+                showFieldError('passwordError', 'Password is required');
+                isValid = false;
+            } else {
+                passwordCheck = validatePassword(password);
+                if (!passwordCheck.valid) {
+                    showFieldError('passwordError', 'Password does not meet all requirements.');
+                    isValid = false;
+                }
+            }
 
-      if (user) {
-        localStorage.setItem("isLoggedIn", "true");
-        showNotification("Logged in successfully!");
-        setTimeout(() => {
-          window.location.href = "FitVibe.html";
-        }, 1500);
-      } else {
-        showNotification("Invalid email or password.");
-      }
-    });
+            return isValid;
+        }
 
-    function showNotification(message) {
-      notification.textContent = message;
-      notification.classList.add("show");
-      setTimeout(() => {
-        notification.classList.remove("show");
-      }, 3000);
-    }
+        function showFieldError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
 
-    function showGooglePopup() {
-      googlePopup.style.display = "block";
-    }
+        async function loginUser(email, password, rememberMe = false) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email.toLowerCase().trim(), password })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    localStorage.setItem('isLoggedIn', 'true');
+                    
+                    if (rememberMe) {
+                        localStorage.setItem('rememberMe', 'true');
+                        localStorage.setItem('userEmail', email);
+                    } else {
+                        localStorage.removeItem('rememberMe');
+                        localStorage.removeItem('userEmail');
+                    }
+                    return { success: true, user: data.user };
+                } else {
+                    return { success: false, error: data.error || 'Login failed' };
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                return { success: false, error: 'Network error. Please check your connection.' };
+            }
+        }
 
-    function loginAs(email) {
-      localStorage.setItem("isLoggedIn", "true");
-      showNotification(`Logged in as ${email}`);
-      googlePopup.style.display = "none";
-      setTimeout(() => {
-        window.location.href = "FitVibe.html";
-      }, 1500);
-    }
+        function loginWithLocalStorage(email, password) {
+            const users = JSON.parse(localStorage.getItem("fitvibe_users")) || [];
+            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+            if (user) {
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("user", JSON.stringify(user));
+                return { success: true, user };
+            } else {
+                return { success: false, error: 'Invalid email or password' };
+            }
+        }
 
-    togglePassword.addEventListener("click", () => {
-      const isPassword = passwordInput.type === "password";
-      passwordInput.type = isPassword ? "text" : "password";
-      togglePassword.classList.toggle("fa-eye");
-      togglePassword.classList.toggle("fa-eye-slash");
-    });
-  </script>
+        function setLoadingState(loading) {
+            if (loading) {
+                loginBtn.disabled = true;
+                btnText.innerHTML = '<span class="loading"></span>Signing in...';
+            } else {
+                loginBtn.disabled = false;
+                btnText.textContent = 'Login';
+            }
+        }
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const rememberMe = document.getElementById('remember').checked;
+
+            setLoadingState(true);
+
+            let result = await loginUser(email, password, rememberMe);
+            
+            if (!result.success && result.error.includes('Network')) {
+                console.log('API unavailable, using localStorage fallback');
+                result = loginWithLocalStorage(email, password);
+            }
+
+            setLoadingState(false);
+
+            if (result.success) {
+                showNotification("Login successful! Redirecting...", 'success');
+                setTimeout(() => {
+                    window.location.href = "fitvibe.html";
+                }, 1500);
+            } else {
+                showNotification(result.error, 'error');
+            }
+        });
+
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove("show");
+            }, 4000);
+        }
+
+        function showGooglePopup() {
+            googlePopup.style.display = "block";
+        }
+
+        function closeGooglePopup() {
+            googlePopup.style.display = "none";
+        }
+
+        function loginAs(email) {
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("user", JSON.stringify({ 
+                email: email, 
+                name: email.split('@')[0],
+                subscription: 'basic' 
+            }));
+            
+            showNotification(`Logged in as ${email}`, 'success');
+            closeGooglePopup();
+            
+            setTimeout(() => {
+                window.location.href = "fitvibe.html";
+            }, 1500);
+        }
+        
+        passwordInput.addEventListener('focus', () => {
+            passwordRequirements.classList.add('show');
+            updatePasswordRequirementsUI(passwordInput.value);
+        });
+
+        passwordInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                const password = passwordInput.value;
+                const passwordCheck = validatePassword(password);
+                if (password === '' || passwordCheck.valid) {
+                    passwordRequirements.classList.remove('show');
+                }
+            }, 100);
+        });
+
+        passwordInput.addEventListener('input', () => {
+            updatePasswordRequirementsUI(passwordInput.value);
+            document.getElementById('passwordError').style.display = 'none';
+        });
+        
+        emailInput.addEventListener('input', () => {
+             document.getElementById('emailError').style.display = 'none';
+        });
+
+        togglePassword.addEventListener("click", () => {
+            const isPassword = passwordInput.type === "password";
+            passwordInput.type = isPassword ? "text" : "password";
+            togglePassword.classList.toggle("fa-eye");
+            togglePassword.classList.toggle("fa-eye-slash");
+        });
+
+        emailInput.addEventListener('blur', () => {
+            const email = emailInput.value.trim();
+            const emailError = document.getElementById('emailError');
+            if (email && !validateEmail(email)) {
+                emailError.textContent = 'Please enter a valid email address.';
+                emailError.style.display = 'block';
+            } else {
+                emailError.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const rememberedEmail = localStorage.getItem('userEmail');
+            const rememberMe = localStorage.getItem('rememberMe');
+            
+            if (rememberMe === 'true' && rememberedEmail) {
+                emailInput.value = rememberedEmail;
+                document.getElementById('remember').checked = true;
+            }
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const token = localStorage.getItem('token');
+            
+            if (isLoggedIn === 'true' || token) {
+                showNotification('You are already logged in. Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = "fitvibe.html";
+                }, 1000);
+            }
+        });
+
+        form.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+        
+        document.querySelector('.forgot-password a').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'forget.html';
+        });
+        
+        document.querySelector('.signup-link a').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'sign.html';
+        });
+    </script>
 </body>
 </html>

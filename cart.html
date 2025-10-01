@@ -8,20 +8,42 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #111111;
-      color: #EDEDED;
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
     }
 
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0d0d0d 0%, #1a0d1a 50%, #0d0d1a 100%);
+      color: #EDEDED;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Interactive background particles */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Header Styles */
     header {
-      background-color: #1A1A1A;
+      background: rgba(26, 26, 26, 0.95);
+      backdrop-filter: blur(20px);
       padding: 15px 0;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       position: sticky;
       top: 0;
-      z-index: 999;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(204, 102, 255, 0.2);
     }
 
     .header-container {
@@ -35,10 +57,17 @@
 
     header h1 {
       font-size: 2.5rem;
-      background: linear-gradient(to right, #DA70D6, #C084FC);
+      background: linear-gradient(45deg, #DA70D6, #C084FC, #cc66ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 0;
+      text-shadow: 0 0 30px rgba(204, 102, 255, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    header h1:hover {
+      transform: scale(1.05);
+      filter: brightness(1.2);
     }
 
     .nav-links {
@@ -46,270 +75,845 @@
       display: flex;
       gap: 30px;
       align-items: center;
-      margin: 0;
-      padding: 0;
     }
 
     .nav-links a {
       color: #FAFAFA;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
       font-size: 1rem;
       position: relative;
-      padding-bottom: 3px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
     }
 
-    .nav-links a::after {
+    .nav-links a::before {
       content: "";
       position: absolute;
-      width: 0%;
+      width: 0;
       height: 2px;
-      background: #C084FC;
-      left: 0;
+      background: linear-gradient(90deg, #cc66ff, #DA70D6);
+      left: 50%;
       bottom: 0;
-      transition: width 0.3s ease-in-out;
+      transform: translateX(-50%);
+      transition: width 0.3s ease;
     }
 
-    .nav-links a:hover::after {
-      width: 100%;
+    .nav-links a:hover {
+      color: #cc66ff;
+      background: rgba(204, 102, 255, 0.1);
+      transform: translateY(-2px);
     }
 
-    @media (max-width: 768px) {
-      .header-container {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-      }
-
-      .nav-links {
-        flex-direction: column;
-        gap: 15px;
-      }
+    .nav-links a:hover::before {
+      width: 80%;
     }
 
-    .cart-container {
-      max-width: 800px;
-      margin: 80px auto;
-      padding: 25px;
-      background-color: #181818;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(128, 90, 213, 0.15);
+    /* Cart Container */
+    .main-wrapper {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+      min-height: calc(100vh - 200px);
     }
 
-    .cart-container h2 {
+    .cart-section {
+      background: rgba(24, 24, 24, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(204, 102, 255, 0.1);
+      border: 1px solid rgba(204, 102, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cart-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #cc66ff, transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .cart-section h2 {
       text-align: center;
-      font-size: 2.2rem;
-      background: linear-gradient(to right, #A78BFA, #C084FC);
+      font-size: 2.5rem;
+      background: linear-gradient(45deg, #A78BFA, #C084FC, #cc66ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
+      font-weight: 700;
+      text-shadow: 0 0 30px rgba(204, 102, 255, 0.3);
+    }
+
+    /* Cart Items */
+    .cart-items-container {
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .cart-items-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .cart-items-container::-webkit-scrollbar-track {
+      background: rgba(51, 51, 51, 0.3);
+      border-radius: 3px;
+    }
+
+    .cart-items-container::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #cc66ff, #DA70D6);
+      border-radius: 3px;
     }
 
     .cart-item {
       display: flex;
       justify-content: space-between;
-      padding: 15px;
-      border-bottom: 1px solid #333;
       align-items: center;
+      padding: 20px;
+      margin-bottom: 15px;
+      background: rgba(51, 51, 51, 0.6);
+      border-radius: 15px;
+      border: 1px solid rgba(204, 102, 255, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      animation: slideInUp 0.5s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
     }
 
-    .cart-item:last-child {
-      border-bottom: none;
+    .cart-item:nth-child(n) {
+      animation-delay: calc(0.1s * var(--item-index, 0));
     }
 
-    .cart-item h3 {
-      margin: 0;
-      font-size: 1.1rem;
-      color: #D6BCFA;
+    @keyframes slideInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .cart-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(204, 102, 255, 0.1), transparent);
+      transition: left 0.6s;
+    }
+
+    .cart-item:hover::before {
+      left: 100%;
+    }
+
+    .cart-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(204, 102, 255, 0.2);
+      border-color: rgba(204, 102, 255, 0.3);
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-info h3 {
+      font-size: 1.2rem;
+      color: #E0CFFF;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .item-description {
+      font-size: 0.9rem;
+      color: rgba(240, 230, 255, 0.7);
+      margin-bottom: 10px;
+    }
+
+    .item-features {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .feature-tag {
+      background: rgba(204, 102, 255, 0.2);
+      color: #cc99ff;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      border: 1px solid rgba(204, 102, 255, 0.3);
+    }
+
+    .item-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(51, 51, 51, 0.8);
+      border-radius: 25px;
+      padding: 5px;
+    }
+
+    .qty-btn {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: linear-gradient(135deg, #cc66ff, #DA70D6);
+      color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .qty-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px rgba(204, 102, 255, 0.4);
+    }
+
+    .qty-btn:active {
+      transform: scale(0.95);
+    }
+
+    .quantity {
+      min-width: 40px;
+      text-align: center;
+      font-weight: 600;
+      color: #cc99ff;
     }
 
     .item-price {
-      color: #C4B5FD;
-      font-size: 1rem;
+      color: #90EE90;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(144, 238, 144, 0.3);
     }
 
     .delete-btn {
-      cursor: pointer;
+      width: 40px;
+      height: 40px;
       border: none;
-      background-color: #1F1F1F;
-      padding: 8px;
-      border-radius: 8px;
-      transition: background 0.3s ease;
+      background: linear-gradient(135deg, #ff6b6b, #ff5252);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .delete-btn i {
-      color: #FFFFFF;
-      font-size: 1rem;
+    .delete-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #ff8a80, #ff6b6b);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .delete-btn:hover::before {
+      opacity: 1;
     }
 
     .delete-btn:hover {
-      background-color: #2C2C2C;
+      transform: scale(1.1) rotate(10deg);
+      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
     }
 
-    .cart-total {
-      text-align: right;
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-top: 25px;
-      color: #E0CFFF;
+    .delete-btn i {
+      color: white;
+      font-size: 1rem;
+      z-index: 1;
+      position: relative;
     }
 
-    .empty-message {
+    /* Summary Section */
+    .cart-summary {
+      background: rgba(24, 24, 24, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(204, 102, 255, 0.1);
+      border: 1px solid rgba(204, 102, 255, 0.2);
+      height: fit-content;
+      position: sticky;
+      top: 120px;
+    }
+
+    .summary-title {
+      font-size: 1.8rem;
+      color: #cc66ff;
+      margin-bottom: 25px;
       text-align: center;
+      font-weight: 700;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .summary-row:last-child {
+      border-bottom: 2px solid rgba(204, 102, 255, 0.3);
       font-size: 1.2rem;
-      color: #888;
+      font-weight: 700;
+      color: #90EE90;
+      text-shadow: 0 0 15px rgba(144, 238, 144, 0.3);
+    }
+
+    .discount-section {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(51, 51, 51, 0.6);
+      border-radius: 12px;
+      border: 1px solid rgba(204, 102, 255, 0.2);
+    }
+
+    .promo-input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(26, 26, 26, 0.8);
+      border: 2px solid rgba(204, 102, 255, 0.3);
+      border-radius: 10px;
+      color: white;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .promo-input:focus {
+      outline: none;
+      border-color: #cc66ff;
+      box-shadow: 0 0 15px rgba(204, 102, 255, 0.3);
+    }
+
+    .apply-btn {
+      width: 100%;
+      padding: 10px;
+      background: linear-gradient(135deg, #cc66ff, #DA70D6);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .apply-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(204, 102, 255, 0.3);
     }
 
     .checkout-btn {
-      margin-top: 25px;
-      display: inline-block;
-      background-color: #8B5CF6;
-      padding: 12px 28px;
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #8B5CF6, #A78BFA);
       border: none;
-      border-radius: 24px;
-      color: #fff;
-      font-size: 1rem;
+      border-radius: 15px;
+      color: white;
+      font-size: 1.1rem;
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s ease-in-out;
+      margin-top: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .checkout-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.6s;
+    }
+
+    .checkout-btn:hover::before {
+      left: 100%;
     }
 
     .checkout-btn:hover {
-      background-color: #A78BFA;
-      transform: scale(1.05);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
     }
 
-    .toast {
-      visibility: hidden;
-      min-width: 250px;
-      background-color: #2196F3;
-      color: white;
+    .checkout-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .checkout-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Empty Cart */
+    .empty-cart {
       text-align: center;
-      border-radius: 20px;
-      padding: 14px;
+      padding: 60px 20px;
+      color: rgba(240, 230, 255, 0.6);
+    }
+
+    .empty-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+      opacity: 0.3;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .empty-message {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+
+    .empty-submessage {
+      font-size: 1rem;
+      margin-bottom: 30px;
+    }
+
+    .shop-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #cc66ff, #DA70D6);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .shop-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(204, 102, 255, 0.3);
+    }
+
+    /* Toast Notification */
+    .toast {
       position: fixed;
       bottom: 30px;
       right: 30px;
-      z-index: 1000;
-      font-size: 1rem;
-      box-shadow: 0 0 10px rgba(128, 90, 213, 0.2);
-      opacity: 0;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      background: linear-gradient(135deg, #2196F3, #21CBF3);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 50px;
+      box-shadow: 0 10px 30px rgba(33, 150, 243, 0.3);
+      z-index: 10000;
+      transform: translateX(400px);
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .toast.show {
-      visibility: visible;
-      opacity: 1;
-      transform: translateY(0);
+      transform: translateX(0);
+    }
+
+    .toast.success {
+      background: linear-gradient(135deg, #4CAF50, #8BC34A);
+    }
+
+    .toast.error {
+      background: linear-gradient(135deg, #f44336, #ff6b6b);
+    }
+
+    .toast.warning {
+      background: linear-gradient(135deg, #FF9800, #FFC107);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+      }
+
+      .main-wrapper {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin: 20px auto;
+        padding: 15px;
+      }
+
+      .cart-section, .cart-summary {
+        padding: 20px;
+      }
+
+      .cart-section h2 {
+        font-size: 2rem;
+      }
+
+      .cart-item {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+
+      .item-controls {
+        justify-content: center;
+      }
+
+      .cart-summary {
+        position: relative;
+        top: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      .nav-links a {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+      }
+
+      .cart-section h2 {
+        font-size: 1.8rem;
+      }
+
+      .cart-item {
+        padding: 15px;
+      }
+    }
+
+    /* Loading Animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 
 <body>
+  <!-- Interactive background canvas -->
+  <canvas id="particles-canvas"></canvas>
 
   <header>
     <div class="header-container">
-      <h1>FitVibe</h1>
+      <h1 onclick="window.location.href='FitVibe.html'">FitVibe</h1>
       <nav>
         <ul class="nav-links">
-          <li><a href="FitVibe.html">HOME</a></li>
-          <li><a href="BMIcheck.html">BMI</a></li>
-          <li><a href="pricing.html">PRICING</a></li>
-          <li><a href="cart.html">CART</a></li>
+          <li><a href="FitVibe.html"><i class="fas fa-home"></i> HOME</a></li>
+          <li><a href="BMIcheck.html"><i class="fas fa-calculator"></i> BMI</a></li>
+          <li><a href="pricing.html"><i class="fas fa-tags"></i> PRICING</a></li>
+          <li><a href="cart.html"><i class="fas fa-shopping-cart"></i> CART</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <div class="cart-container">
-    <h2>Your Cart</h2>
-    <div id="cart-items"></div>
-    <div class="cart-total" id="cart-total"></div>
-    <div style="text-align:center;">
-      <button class="checkout-btn" onclick="proceedToPay()">Proceed to Pay</button>
+  <div class="main-wrapper">
+    <div class="cart-section">
+      <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+      <div class="cart-items-container" id="cart-items"></div>
+    </div>
+
+    <div class="cart-summary">
+      <h3 class="summary-title">Order Summary</h3>
+      <div class="summary-details" id="summary-details">
+        <div class="summary-row">
+          <span>Items (<span id="item-count">0</span>)</span>
+          <span id="subtotal">₹0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span id="shipping">₹0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Tax</span>
+          <span id="tax">₹0.00</span>
+        </div>
+        <div class="summary-row" id="discount-row" style="display: none;">
+          <span>Discount</span>
+          <span id="discount">-₹0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Total</span>
+          <span id="total">₹0.00</span>
+        </div>
+      </div>
+
+      <div class="discount-section">
+        <input type="text" class="promo-input" id="promo-code" placeholder="Enter promo code">
+        <button class="apply-btn" onclick="applyPromoCode()">Apply Code</button>
+      </div>
+
+      <button class="checkout-btn" onclick="proceedToPay()" id="checkout-btn">
+        <i class="fas fa-credit-card"></i> Proceed to Pay
+      </button>
     </div>
   </div>
 
   <!-- Toast Notification -->
-  <div id="toast" class="toast">Placeholder</div>
+  <div id="toast" class="toast">
+    <i class="fas fa-info-circle"></i>
+    <span id="toast-message">Placeholder</span>
+  </div>
 
   <script>
-    const cartItemsDiv = document.getElementById('cart-items');
-    const cartTotalDiv = document.getElementById('cart-total');
-    const toast = document.getElementById('toast');
+    // Interactive Particle System
+    class CartParticleSystem {
+      constructor() {
+        this.canvas = document.getElementById('particles-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.mouse = { x: 0, y: 0 };
+        
+        this.resizeCanvas();
+        this.createParticles();
+        this.animate();
+        this.bindEvents();
+      }
 
-    let total = 0;
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      resizeCanvas() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+
+      createParticles() {
+        const particleCount = Math.min(30, Math.floor(window.innerWidth / 25));
+        this.particles = [];
+        
+        for (let i = 0; i < particleCount; i++) {
+          this.particles.push({
+            x: Math.random() * this.canvas.width,
+            y: Math.random() * this.canvas.height,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            radius: Math.random() * 2 + 1,
+            opacity: Math.random() * 0.4 + 0.1,
+            color: `hsl(${280 + Math.random() * 40}, 70%, 60%)`
+          });
+        }
+      }
+
+      bindEvents() {
+        window.addEventListener('resize', () => this.resizeCanvas());
+        
+        document.addEventListener('mousemove', (e) => {
+          this.mouse.x = e.clientX;
+          this.mouse.y = e.clientY;
+        });
+      }
+
+      animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.particles.forEach(particle => {
+          // Mouse interaction
+          const dx = this.mouse.x - particle.x;
+          const dy = this.mouse.y - particle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 120) {
+            const force = (120 - distance) / 120;
+            particle.vx += dx * force * 0.00002;
+            particle.vy += dy * force * 0.00002;
+          }
+          
+          // Update position
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          
+          // Bounce off edges
+          if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+          if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+          
+          // Apply friction
+          particle.vx *= 0.99;
+          particle.vy *= 0.99;
+          
+          // Draw particle
+          this.ctx.beginPath();
+          this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+          this.ctx.fillStyle = particle.color.replace(')', `, ${particle.opacity})`).replace('hsl', 'hsla');
+          this.ctx.fill();
+        });
+        
+        requestAnimationFrame(() => this.animate());
+      }
+    }
+
+    // Initialize particle system
+    const particleSystem = new CartParticleSystem();
+
+    // Cart functionality
+    const cartItemsDiv = document.getElementById('cart-items');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
-    function renderCart() {
-      cartItemsDiv.innerHTML = '';
-      total = 0;
+    // Sample cart items for demo
+    if (cart.length === 0) {
+      cart = [
+        {
+          name: "Premium Membership",
+          price: 2999,
+          quantity: 1,
+          description: "Access to all premium features",
+          features: ["Unlimited Access", "Personal Trainer", "Nutrition Guide"]
+        },
+        {
+          name: "Fitness Tracker",
+          price: 1499,
+          quantity: 2,
+          description: "Advanced fitness tracking device",
+          features: ["Heart Rate Monitor", "GPS", "Waterproof"]
+        },
+        {
+          name: "Protein Powder",
+          price: 899,
+          quantity: 1,
+          description: "High-quality whey protein",
+          features: ["25g Protein", "BCAA", "Natural Flavors"]
+        }
+      ];
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
 
+    const promoCodes = {
+      'SAVE10': 10,
+      'WELCOME20': 20,
+      'FITNESS15': 15,
+      'NEWBIE25': 25
+    };
+
+    let appliedDiscount = 0;
+
+    function renderCart() {
       if (cart.length === 0) {
-        cartItemsDiv.innerHTML = '<p class="empty-message">Your cart is currently empty.</p>';
-        cartTotalDiv.textContent = '';
+        cartItemsDiv.innerHTML = `
+          <div class="empty-cart">
+            <div class="empty-icon"><i class="fas fa-shopping-cart"></i></div>
+            <div class="empty-message">Your cart is empty</div>
+            <div class="empty-submessage">Add some awesome fitness products to get started!</div>
+            <a href="pricing.html" class="shop-btn">
+              <i class="fas fa-plus"></i> Start Shopping
+            </a>
+          </div>
+        `;
+        updateSummary();
         return;
       }
 
-      cart.forEach((item, index) => {
-        total += item.price;
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'cart-item';
-        itemDiv.innerHTML = `
-          <div><h3>${item.name}</h3></div>
-          <div class="item-price">${item.price.toFixed(2)}</div>
-          <div>
-            <button class="delete-btn" onclick="removeItem(${index})" title="Remove">
-              <i class="fa-solid fa-trash"></i>
+      cartItemsDiv.innerHTML = cart.map((item, index) => `
+        <div class="cart-item" style="--item-index: ${index}">
+          <div class="item-info">
+            <h3>${item.name}</h3>
+            <div class="item-description">${item.description}</div>
+            <div class="item-features">
+              ${item.features.map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
+            </div>
+          </div>
+          <div class="item-controls">
+            <div class="quantity-controls">
+              <button class="qty-btn" onclick="updateQuantity(${index}, -1)">
+                <i class="fas fa-minus"></i>
+              </button>
+              <span class="quantity">${item.quantity}</span>
+              <button class="qty-btn" onclick="updateQuantity(${index}, 1)">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="item-price">₹${(item.price * item.quantity).toFixed(2)}</div>
+            <button class="delete-btn" onclick="removeItem(${index})" title="Remove item">
+              <i class="fas fa-trash"></i>
             </button>
           </div>
-        `;
-        cartItemsDiv.appendChild(itemDiv);
-      });
+        </div>
+      `).join('');
 
-      cartTotalDiv.textContent = `Total: ${total.toFixed(2)}`;
+      updateSummary();
+    }
+
+    function updateQuantity(index, change) {
+      cart[index].quantity += change;
+      
+      if (cart[index].quantity <= 0) {
+        removeItem(index);
+        return;
+      }
+      
+      if (cart[index].quantity > 10) {
+        cart[index].quantity = 10;
+        showToast('Maximum quantity is 10', 'warning');
+      }
+      
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+      showToast('Quantity updated', 'success');
     }
 
     function removeItem(index) {
+      const itemName = cart[index].name;
       cart.splice(index, 1);
       localStorage.setItem('cart', JSON.stringify(cart));
-      showToast('Item removed from cart');
       renderCart();
+      showToast(`${itemName} removed from cart`, 'success');
     }
 
-    function proceedToPay() {
-      if (cart.length === 0) {
-        showToast('Your cart is empty.');
-        return;
-      }
-
-      if (!isLoggedIn) {
-        showToast('Please login to continue...');
-        setTimeout(() => {
-          window.location.href = 'login.html';
-        }, 1500);
-        return;
-      }
-
-      showToast('Redirecting to payment...');
-      setTimeout(() => {
-        // Redirect to the payment page which connects to payment.index
-        window.location.href = 'payment.html';
-      }, 1500);
-    }
-
-    function showToast(message) {
-      toast.textContent = message;
-      toast.className = 'toast show';
-      setTimeout(() => {
-        toast.className = 'toast';
-      }, 3000);
-    }
-
-    renderCart();
-  </script>
-
-</body>
-
-</html>
+    function updateSummary() {
+      const subtotal = cart.reduce((
