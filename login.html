@@ -1,176 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - FitVibe</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
+        /* Global Reset and Base Styles */
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --color-dark-bg: #0d0d1a;
+            --color-card-bg: rgba(26, 26, 26, 0.9);
+            --color-primary-purple: #C084FC;
+            --color-secondary-pink: #DA70D6;
+            --color-text-light: #f2e6ff;
+            --color-text-muted: rgba(242, 230, 255, 0.6);
+            --color-border: rgba(192, 132, 252, 0.2);
+            --color-error: #ff6b6b;
+            --color-success: #4dff88;
+        }
+
         body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background-color: #121212;
-            color: #e6e6fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-dark-bg) 0%, #1a0d1a 50%, var(--color-dark-bg) 100%);
+            color: var(--color-text-light);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Navigation Styles */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 13, 26, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--color-primary-purple);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--color-text-light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(192, 132, 252, 0.2);
+            color: var(--color-primary-purple);
+        }
+
+        .login-container {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            position: relative;
+            padding-top: 80px;
         }
 
-        .login-container {
-            background-color: #1f1f1f;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 0 30px rgba(177, 156, 217, 0.15);
+        /* Background Effects (Keeping Original for style) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(218, 112, 214, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(192, 132, 252, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 20%, rgba(167, 139, 250, 0.1) 0%, transparent 50%);
+            animation: gradientShift 15s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(10%, 10%) rotate(120deg); }
+            66% { transform: translate(-10%, 10%) rotate(240deg); }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 400px;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.15; /* Slightly increased opacity */
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--color-secondary-pink), var(--color-primary-purple));
+            border-radius: 50%;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 25s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--color-primary-purple), #A78BFA);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            top: 60%;
+            right: 10%;
+            animation-delay: 5s;
+            animation-duration: 30s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #A78BFA, var(--color-secondary-pink));
+            border-radius: 50%;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 10s;
+            animation-duration: 20s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(30px, -30px) rotate(90deg) scale(1.1); }
+            50% { transform: translate(-20px, 20px) rotate(180deg) scale(0.9); }
+            75% { transform: translate(20px, 30px) rotate(270deg) scale(1.05); }
+        }
+        
+        /* Login Container */
+        .login-container {
+            background: var(--color-card-bg);
+            backdrop-filter: blur(25px); /* Increased blur */
+            border-radius: 20px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6); /* Deeper shadow */
+            border: 1px solid var(--color-border);
             position: relative;
-            z-index: 10;
+            z-index: 1;
+            animation: fadeInUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncier animation */
         }
 
-        .login-container h2 {
-            color: #b19cd9;
-            font-size: 2rem;
-            margin-bottom: 10px;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Form Shake Animation for Error */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        
+        .login-container.error-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Logo */
+        .logo {
             text-align: center;
+            margin-bottom: 40px;
         }
 
-        .login-container p {
-            color: #aaa;
+        .logo h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--color-secondary-pink), var(--color-primary-purple), #cc66ff, #A78BFA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { filter: brightness(1) drop-shadow(0 0 10px rgba(192, 132, 252, 0.3)); }
+            100% { filter: brightness(1.3) drop-shadow(0 0 20px rgba(192, 132, 252, 0.6)); }
+        }
+
+        .logo p {
+            color: var(--color-text-muted);
+            font-size: 14px;
+        }
+
+        /* Form Fields */
+        .form-group {
             margin-bottom: 25px;
-            font-size: 0.95rem;
-            text-align: center;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(242, 230, 255, 0.9);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
         .input-wrapper {
             position: relative;
-            margin-bottom: 15px;
         }
 
-        .input-wrapper input {
-            width: 100%;
-            padding: 12px 40px 12px 12px;
-            border: 1px solid #333;
-            border-radius: 8px;
-            background-color: #2c2c2c;
-            color: #e6e6fa;
-            transition: border 0.3s ease;
-            font-size: 1rem;
-        }
-
-        .input-wrapper input::placeholder {
-            color: #999;
-        }
-
-        .input-wrapper input:focus {
-            outline: none;
-            border-color: #b19cd9;
-            box-shadow: 0 0 5px rgba(177, 156, 217, 0.5);
-        }
-
-        .toggle-password {
+        .input-icon {
             position: absolute;
+            left: 15px;
             top: 50%;
-            right: 12px;
             transform: translateY(-50%);
+            color: var(--color-primary-purple);
+            font-size: 18px;
+            transition: color 0.3s ease; /* Transition added */
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            color: var(--color-text-light);
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: rgba(26, 26, 26, 0.95);
+            border-color: var(--color-primary-purple);
+            box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
+        }
+        
+        /* Input Icon Focus Enhancement */
+        .form-group input:focus + .password-toggle,
+        .form-group input:focus ~ .input-icon {
+            color: var(--color-secondary-pink);
+        }
+        
+        /* Input Validation Feedback */
+        .form-group input:not(:placeholder-shown):invalid {
+            border-color: var(--color-error);
+            box-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
+        }
+        
+        .form-group input:not(:placeholder-shown):valid {
+            border-color: var(--color-success);
+        }
+
+
+        .form-group input::placeholder {
+            color: rgba(242, 230, 255, 0.4);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-primary-purple);
             cursor: pointer;
-            color: #aaa;
-            font-size: 1rem;
+            font-size: 18px;
+            transition: all 0.3s;
         }
 
-        .toggle-password:hover {
-            color: #b19cd9;
+        .password-toggle:hover {
+            color: var(--color-secondary-pink);
+            transform: translateY(-50%) scale(1.1);
         }
         
-        /* Password Requirement Section */
-        .password-requirements {
-            background-color: #2c2c2c;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: -5px;
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-            color: #ccc;
-            opacity: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
+        /* Form Options */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
         }
 
-        .password-requirements.show {
-            opacity: 1;
-            max-height: 150px;
-        }
-        
-        .password-requirements ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .password-requirements li {
+        .remember-me {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 5px;
-        }
-
-        .password-requirements li .fa-check {
-            color: #4CAF50;
-            display: none;
+            color: rgba(242, 230, 255, 0.7);
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none; /* Prevents text selection */
         }
         
-        .password-requirements li .fa-times {
-            color: #f44336;
-            display: inline-block;
-        }
-
-        .password-requirements li.valid .fa-check {
-            display: inline-block;
-        }
-        
-        .password-requirements li.valid .fa-times {
-            display: none;
-        }
-
-        .remember-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-
-        .remember-container input[type="checkbox"] {
+        /* Custom Checkbox Styling */
+        .remember-me input[type="checkbox"] {
             -webkit-appearance: none;
+            -moz-appearance: none;
             appearance: none;
             width: 18px;
             height: 18px;
-            border: 2px solid #555;
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px solid var(--color-border);
             border-radius: 4px;
             cursor: pointer;
             position: relative;
             transition: all 0.2s ease;
         }
-
-        .remember-container input[type="checkbox"]:checked {
-            background-color: #b19cd9;
-            border-color: #b19cd9;
+        
+        .remember-me input[type="checkbox"]:checked {
+            background: var(--color-primary-purple);
+            border-color: var(--color-primary-purple);
+            box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
         }
 
-        .remember-container input[type="checkbox"]:checked::after {
-            content: '\f00c';
+        .remember-me input[type="checkbox"]:checked::after {
+            content: '\f00c'; /* Font Awesome checkmark icon */
             font-family: 'Font Awesome 6 Free';
             font-weight: 900;
-            color: #1f1f1f;
+            color: white;
             font-size: 12px;
             position: absolute;
             top: 50%;
@@ -178,567 +365,451 @@
             transform: translate(-50%, -50%);
         }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(to right, #b19cd9, #a188c8);
-            color: #121212;
+        .forgot-password {
+            color: var(--color-primary-purple);
+            text-decoration: none;
+            font-size: 14px;
             font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .forgot-password:hover {
+            color: var(--color-secondary-pink);
+            text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+        }
+
+        /* Login Button */
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--color-primary-purple), var(--color-secondary-pink));
             border: none;
-            border-radius: 8px;
-            font-size: 15px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(192, 132, 252, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        button:hover {
-            background: linear-gradient(to right, #a188c8, #b19cd9);
-            transform: translateY(-1px);
+        .btn-login:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(192, 132, 252, 0.6);
+            background: linear-gradient(135deg, var(--color-secondary-pink), #E0B0FF);
         }
 
-        button:disabled {
+        .btn-login:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 5px 20px rgba(192, 132, 252, 0.4);
+        }
+
+        .btn-login:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
+            filter: grayscale(0.5);
+            box-shadow: none;
         }
 
-        .loading {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #121212;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .or-container {
-            margin: 25px 0 15px;
-            display: flex;
-            align-items: center;
+        /* Divider */
+        .divider {
             text-align: center;
-            color: #666;
-            font-size: 0.85rem;
+            margin: 30px 0;
+            position: relative;
         }
 
-        .or-container::before,
-        .or-container::after {
+        .divider::before {
             content: '';
-            flex: 1;
-            border-bottom: 1px solid #333;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: var(--color-border);
         }
 
-        .or-container span {
-            margin: 0 10px;
+        .divider span {
+            background: var(--color-card-bg);
+            padding: 0 15px;
+            color: rgba(242, 230, 255, 0.5);
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
         }
 
-        .google-btn button {
-            background-color: #333;
-            color: #e6e6fa;
-            border: 1px solid #555;
-            margin-top: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-        }
-
-        .google-btn button:hover {
-            background-color: #444;
-        }
-
+        /* Sign Up Link */
         .signup-link {
-            margin-top: 20px;
-            font-size: 0.9rem;
             text-align: center;
+            color: rgba(242, 230, 255, 0.7);
+            font-size: 14px;
         }
 
         .signup-link a {
-            color: #b19cd9;
+            color: var(--color-primary-purple);
             text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
         }
 
         .signup-link a:hover {
-            text-decoration: underline;
+            color: var(--color-secondary-pink);
+            text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
         }
-
-        .forgot-password {
-            text-align: center;
-            font-size: 0.85rem;
-            margin-top: 10px;
-        }
-
-        .forgot-password a {
-            color: #b19cd9;
-            text-decoration: none;
-        }
-
-        .forgot-password a:hover {
-            text-decoration: underline;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 14px 24px;
-            border-radius: 8px;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.5s ease;
-            z-index: 1000;
-            font-weight: 500;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .notification.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .notification.error {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .google-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #1f1f1f;
-            padding: 20px;
+        
+        /* Message Boxes */
+        .error-message, .success-message {
+            padding: 12px 15px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(177, 156, 217, 0.3);
+            margin-bottom: 20px;
+            font-size: 14px;
             display: none;
-            z-index: 2000;
-        }
-
-        .google-popup h3 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #b19cd9;
-            text-align: center;
-        }
-
-        .google-option {
-            padding: 12px 18px;
-            margin-bottom: 10px;
-            background-color: #2c2c2c;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            color: #e6e6fa;
-            display: flex;
             align-items: center;
             gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .google-option:hover {
-            background-color: #3a3a3a;
-        }
-
-        .google-option .fab {
-            color: #b19cd9;
+        .error-message.show, .success-message.show {
+            opacity: 1;
         }
 
         .error-message {
-            color: #f44336;
-            font-size: 0.85rem;
-            margin-top: 5px;
-            display: none;
+            background: rgba(255, 77, 77, 0.1);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            color: var(--color-error);
         }
 
+        .success-message {
+            background: rgba(77, 255, 136, 0.1);
+            border: 1px solid rgba(77, 255, 136, 0.3);
+            color: var(--color-success);
+        }
+        
+        /* Back Home */
         .back-home {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #b19cd9;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-home a {
+            color: rgba(242, 230, 255, 0.6);
             text-decoration: none;
-            font-size: 1rem;
-            display: flex;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: color 0.3s ease;
         }
 
-        .back-home:hover {
-            color: #a188c8;
+        .back-home a:hover {
+            color: var(--color-primary-purple);
+            text-shadow: 0 0 5px rgba(192, 132, 252, 0.3);
         }
 
+        /* Media Queries */
         @media (max-width: 480px) {
             .login-container {
-                margin: 20px;
-                padding: 30px 20px;
+                padding: 40px 30px;
+            }
+
+            .logo h1 {
+                font-size: 2.5rem;
             }
         }
     </style>
 </head>
-
 <body>
-    <a href="fitvibe.html" class="back-home">
-        <i class="fas fa-arrow-left"></i>
-        Back to Home
-    </a>
+    <!-- Navigation Header -->
+    <nav class="nav-header">
+        <div class="nav-content">
+            <a href="fitvibe.html" class="nav-logo">FitVibe</a>
+            <ul class="nav-links">
+                <li><a href="fitvibe.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="exercises.html"><i class="fas fa-dumbbell"></i> Exercises</a></li>
+                <li><a href="BMIcheck.html"><i class="fas fa-calculator"></i> BMI</a></li>
+                <li><a href="pricing.html"><i class="fas fa-tags"></i> Pricing</a></li>
+                <li><a href="sign.html"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <div class="login-container">
-        <h2>FitVibe</h2>
-        <p>Welcome back! Please sign in to your account.</p>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="login-container" id="loginContainer">
+        <div class="logo">
+            <h1>FITVIBE</h1>
+            <p>Start Your Fitness Journey</p>
+        </div>
+
+        <div id="errorMessage" class="error-message" role="alert" aria-live="assertive">
+            <i class="fas fa-exclamation-circle"></i>
+            <span></span>
+        </div>
+        <div id="successMessage" class="success-message" role="status" aria-live="polite">
+            <i class="fas fa-check-circle"></i>
+            <span></span>
+        </div>
 
         <form id="loginForm">
-            <div class="input-wrapper">
-                <input type="email" id="email" placeholder="Email" required autocomplete="email">
-                <div class="error-message" id="emailError"></div>
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Enter your email"
+                        required
+                        aria-required="true"
+                    >
+                    <i class="input-icon fas fa-envelope"></i>
+                </div>
+                <small class="validation-feedback" id="email-feedback" style="color: var(--color-error); display: none; margin-top: 5px;">Invalid email format.</small>
             </div>
 
-            <div class="input-wrapper">
-                <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
-                <i class="fa-solid fa-eye toggle-password" id="togglePassword" aria-hidden="true"></i>
-                <div class="error-message" id="passwordError"></div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter your password"
+                        required
+                        minlength="6"
+                        aria-required="true"
+                    >
+                    <i class="input-icon fas fa-lock"></i>
+                    <i class="password-toggle fas fa-eye" onclick="togglePassword()"></i>
+                </div>
+                <small class="validation-feedback" id="password-feedback" style="color: var(--color-error); display: none; margin-top: 5px;">Password must be at least 6 characters.</small>
             </div>
 
-            <div id="passwordRequirements" class="password-requirements">
-                <p>Password must contain:</p>
-                <ul>
-                    <li id="reqLength"><i class="fas fa-times"></i><i class="fas fa-check"></i> At least 8 characters</li>
-                    <li id="reqUpper"><i class="fas fa-times"></i><i class="fas fa-check"></i> An uppercase letter</li>
-                    <li id="reqLower"><i class="fas fa-times"></i><i class="fas fa-check"></i> A lowercase letter</li>
-                    <li id="reqNumber"><i class="fas fa-times"></i><i class="fas fa-check"></i> A number</li>
-                    <li id="reqSpecial"><i class="fas fa-times"></i><i class="fas fa-check"></i> A special character</li>
-                </ul>
-            </div>
-            
-            <div class="remember-container">
-                <input type="checkbox" id="remember">
-                <label for="remember">Remember me</label>
+            <div class="form-options">
+                <label class="remember-me" for="rememberMe">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    <span>Remember me</span>
+                </label>
+                <a href="#" class="forgot-password">Forgot Password?</a>
             </div>
 
-            <button type="submit" id="loginBtn">
-                <span class="btn-text">Login</span>
+            <button type="submit" class="btn-login" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i> Log In
             </button>
         </form>
 
-        <div class="forgot-password">
-            <a href="forget.html">Forgot Password?</a>
-        </div>
-
-        <div class="or-container">
+        <div class="divider">
             <span>OR</span>
         </div>
 
-        <div class="google-btn">
-            <button type="button" onclick="showGooglePopup()">
-                <i class="fab fa-google"></i>
-                Login with Google
-            </button>
-        </div>
-
         <div class="signup-link">
-            Don't have an account? <a href="sign.html">Sign up</a>
+            Don't have an account? <a href="sign.html">Sign Up</a>
         </div>
-    </div>
 
-    <div class="notification" id="notification"></div>
-
-    <div class="google-popup" id="googlePopup">
-        <h3>Select a Google account</h3>
-        <div class="google-option" onclick="loginAs('diya@gmail.com')">
-            <i class="fab fa-google"></i>
-            diya@gmail.com
-        </div>
-        <div class="google-option" onclick="loginAs('ghanisha@gmail.com')">
-            <i class="fab fa-google"></i>
-            ghanisha@gmail.com
-        </div>
-        <div style="text-align: center; margin-top: 15px;">
-            <button type="button" onclick="closeGooglePopup()" style="background: #333; color: #aaa; padding: 8px 16px; font-size: 0.9rem;">Cancel</button>
+        <div class="back-home">
+            <a href="FitVibe.html">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
         </div>
     </div>
 
     <script>
-        const API_BASE_URL = 'http://localhost:5000/api';
-        
-        const form = document.getElementById("loginForm");
-        const notification = document.getElementById("notification");
-        const passwordInput = document.getElementById("password");
-        const emailInput = document.getElementById("email");
-        const togglePassword = document.getElementById("togglePassword");
-        const googlePopup = document.getElementById("googlePopup");
-        const loginBtn = document.getElementById("loginBtn");
-        const btnText = loginBtn.querySelector('.btn-text');
-        const passwordRequirements = document.getElementById('passwordRequirements');
+        const API_URL = 'http://localhost:5000/api';
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginContainer = document.getElementById('loginContainer');
+        const emailFeedback = document.getElementById('email-feedback');
+        const passwordFeedback = document.getElementById('password-feedback');
+        const successDiv = document.getElementById('successMessage');
+        const errorDiv = document.getElementById('errorMessage');
 
-        function validateEmail(email) {
-            const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-            return emailRegex.test(email);
-        }
-
-        function validatePassword(password) {
-            const requirements = {
-                length: password.length >= 8,
-                uppercase: /[A-Z]/.test(password),
-                lowercase: /[a-z]/.test(password),
-                number: /[0-9]/.test(password),
-                special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(password)
-            };
-            return {
-                valid: Object.values(requirements).every(Boolean),
-                requirements: requirements
-            };
-        }
-        
-        function updatePasswordRequirementsUI(password) {
-            const reqs = validatePassword(password).requirements;
-            document.getElementById('reqLength').classList.toggle('valid', reqs.length);
-            document.getElementById('reqUpper').classList.toggle('valid', reqs.uppercase);
-            document.getElementById('reqLower').classList.toggle('valid', reqs.lowercase);
-            document.getElementById('reqNumber').classList.toggle('valid', reqs.number);
-            document.getElementById('reqSpecial').classList.toggle('valid', reqs.special);
-        }
-
-        function validateForm() {
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
-            let isValid = true;
-            let passwordCheck = {};
-
-            document.getElementById('emailError').style.display = 'none';
-            document.getElementById('passwordError').style.display = 'none';
-
-            if (!email) {
-                showFieldError('emailError', 'Email is required');
-                isValid = false;
-            } else if (!validateEmail(email)) {
-                showFieldError('emailError', 'Please enter a valid email address.');
-                isValid = false;
-            }
-
-            if (!password) {
-                showFieldError('passwordError', 'Password is required');
-                isValid = false;
+        /**
+         * Toggles the password visibility in the input field.
+         */
+        function togglePassword() {
+            const toggle = document.querySelector('.password-toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggle.classList.remove('fa-eye');
+                toggle.classList.add('fa-eye-slash');
+                toggle.setAttribute('aria-label', 'Hide password');
             } else {
-                passwordCheck = validatePassword(password);
-                if (!passwordCheck.valid) {
-                    showFieldError('passwordError', 'Password does not meet all requirements.');
-                    isValid = false;
-                }
+                passwordInput.type = 'password';
+                toggle.classList.remove('fa-eye-slash');
+                toggle.classList.add('fa-eye');
+                toggle.setAttribute('aria-label', 'Show password');
             }
+        }
+        
+        /**
+         * Shows the error message with a brief shake animation.
+         * @param {string} message - The error message to display.
+         */
+        function showError(message) {
+            successDiv.classList.remove('show');
+            errorDiv.querySelector('span').textContent = message;
+            errorDiv.style.display = 'flex';
+            
+            // Allow display change to take effect before applying opacity transition
+            setTimeout(() => {
+                errorDiv.classList.add('show');
+                // Apply shake animation
+                loginContainer.classList.add('error-shake');
+            }, 10);
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+                loginContainer.classList.remove('error-shake');
+                // Hide after transition
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 300);
+            }, 5000);
+        }
 
+        /**
+         * Shows the success message.
+         * @param {string} message - The success message to display.
+         */
+        function showSuccess(message) {
+            errorDiv.classList.remove('show');
+            successDiv.querySelector('span').textContent = message;
+            successDiv.style.display = 'flex';
+            
+            setTimeout(() => {
+                successDiv.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                successDiv.classList.remove('show');
+                // Hide after transition
+                setTimeout(() => {
+                    successDiv.style.display = 'none';
+                }, 300);
+            }, 3000);
+        }
+
+        /**
+         * Simple client-side email validation.
+         */
+        function validateEmail() {
+            const isValid = emailInput.checkValidity();
+            if (!isValid && emailInput.value.trim().length > 0) {
+                emailFeedback.style.display = 'block';
+                emailInput.classList.add('invalid');
+            } else {
+                emailFeedback.style.display = 'none';
+                emailInput.classList.remove('invalid');
+            }
             return isValid;
         }
 
-        function showFieldError(fieldId, message) {
-            const errorElement = document.getElementById(fieldId);
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-
-        async function loginUser(email, password, rememberMe = false) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email.toLowerCase().trim(), password })
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    localStorage.setItem('isLoggedIn', 'true');
-                    
-                    if (rememberMe) {
-                        localStorage.setItem('rememberMe', 'true');
-                        localStorage.setItem('userEmail', email);
-                    } else {
-                        localStorage.removeItem('rememberMe');
-                        localStorage.removeItem('userEmail');
-                    }
-                    return { success: true, user: data.user };
-                } else {
-                    return { success: false, error: data.error || 'Login failed' };
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                return { success: false, error: 'Network error. Please check your connection.' };
-            }
-        }
-
-        function loginWithLocalStorage(email, password) {
-            const users = JSON.parse(localStorage.getItem("fitvibe_users")) || [];
-            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-            if (user) {
-                localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("user", JSON.stringify(user));
-                return { success: true, user };
+        /**
+         * Simple client-side password length validation.
+         */
+        function validatePassword() {
+            const isValid = passwordInput.value.length >= 6;
+            if (!isValid && passwordInput.value.length > 0) {
+                passwordFeedback.style.display = 'block';
+                passwordInput.classList.add('invalid');
             } else {
-                return { success: false, error: 'Invalid email or password' };
+                passwordFeedback.style.display = 'none';
+                passwordInput.classList.remove('invalid');
             }
+            return isValid;
         }
+        
+        // Add real-time validation listeners
+        emailInput.addEventListener('input', validateEmail);
+        passwordInput.addEventListener('input', validatePassword);
 
-        function setLoadingState(loading) {
-            if (loading) {
-                loginBtn.disabled = true;
-                btnText.innerHTML = '<span class="loading"></span>Signing in...';
-            } else {
-                loginBtn.disabled = false;
-                btnText.textContent = 'Login';
-            }
-        }
 
-        form.addEventListener("submit", async function (e) {
+        /**
+         * Handles the form submission and API call.
+         */
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Run final validation check
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
 
-            if (!validateForm()) {
+            if (!isEmailValid || !isPasswordValid) {
+                showError('Please correct the highlighted fields.');
                 return;
             }
 
             const email = emailInput.value.trim();
             const password = passwordInput.value;
-            const rememberMe = document.getElementById('remember').checked;
+            const rememberMe = document.getElementById('rememberMe').checked;
 
-            setLoadingState(true);
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Logging In...'; // Updated spinner icon
 
-            let result = await loginUser(email, password, rememberMe);
-            
-            if (!result.success && result.error.includes('Network')) {
-                console.log('API unavailable, using localStorage fallback');
-                result = loginWithLocalStorage(email, password);
-            }
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
 
-            setLoadingState(false);
+                const data = await response.json();
 
-            if (result.success) {
-                showNotification("Login successful! Redirecting...", 'success');
-                setTimeout(() => {
-                    window.location.href = "fitvibe.html";
-                }, 1500);
-            } else {
-                showNotification(result.error, 'error');
-            }
-        });
+                if (response.ok && data.success) {
+                    const storage = rememberMe ? localStorage : sessionStorage;
+                    storage.setItem('fitvibeToken', data.data.token);
+                    storage.setItem('fitvibeUser', JSON.stringify(data.data));
 
-        function showNotification(message, type = 'success') {
-            notification.textContent = message;
-            notification.className = `notification ${type} show`;
-            
-            setTimeout(() => {
-                notification.classList.remove("show");
-            }, 4000);
-        }
+                    showSuccess('Login successful! Redirecting...');
 
-        function showGooglePopup() {
-            googlePopup.style.display = "block";
-        }
-
-        function closeGooglePopup() {
-            googlePopup.style.display = "none";
-        }
-
-        function loginAs(email) {
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("user", JSON.stringify({ 
-                email: email, 
-                name: email.split('@')[0],
-                subscription: 'basic' 
-            }));
-            
-            showNotification(`Logged in as ${email}`, 'success');
-            closeGooglePopup();
-            
-            setTimeout(() => {
-                window.location.href = "fitvibe.html";
-            }, 1500);
-        }
-        
-        passwordInput.addEventListener('focus', () => {
-            passwordRequirements.classList.add('show');
-            updatePasswordRequirementsUI(passwordInput.value);
-        });
-
-        passwordInput.addEventListener('blur', () => {
-            setTimeout(() => {
-                const password = passwordInput.value;
-                const passwordCheck = validatePassword(password);
-                if (password === '' || passwordCheck.valid) {
-                    passwordRequirements.classList.remove('show');
+                    setTimeout(() => {
+                        const redirectPath = data.data.role === 'admin' ? 'admin-dashboard.html' : 'FitVibe.html';
+                        window.location.href = redirectPath;
+                    }, 1500);
+                } else {
+                    showError(data.message || 'Login failed. Please check your credentials.');
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Log In';
                 }
-            }, 100);
-        });
-
-        passwordInput.addEventListener('input', () => {
-            updatePasswordRequirementsUI(passwordInput.value);
-            document.getElementById('passwordError').style.display = 'none';
-        });
-        
-        emailInput.addEventListener('input', () => {
-             document.getElementById('emailError').style.display = 'none';
-        });
-
-        togglePassword.addEventListener("click", () => {
-            const isPassword = passwordInput.type === "password";
-            passwordInput.type = isPassword ? "text" : "password";
-            togglePassword.classList.toggle("fa-eye");
-            togglePassword.classList.toggle("fa-eye-slash");
-        });
-
-        emailInput.addEventListener('blur', () => {
-            const email = emailInput.value.trim();
-            const emailError = document.getElementById('emailError');
-            if (email && !validateEmail(email)) {
-                emailError.textContent = 'Please enter a valid email address.';
-                emailError.style.display = 'block';
-            } else {
-                emailError.style.display = 'none';
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Network error. Could not reach the server.');
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Log In';
             }
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const rememberedEmail = localStorage.getItem('userEmail');
-            const rememberMe = localStorage.getItem('rememberMe');
-            
-            if (rememberMe === 'true' && rememberedEmail) {
-                emailInput.value = rememberedEmail;
-                document.getElementById('remember').checked = true;
+        /**
+         * Checks for existing tokens on page load and redirects if authenticated.
+         */
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('fitvibeToken') || sessionStorage.getItem('fitvibeToken');
+            if (token) {
+                const user = JSON.parse(localStorage.getItem('fitvibeUser') || sessionStorage.getItem('fitvibeUser'));
+                if (user) {
+                    const redirectPath = user.role === 'admin' ? 'admin-dashboard.html' : 'FitVibe.html';
+                    console.log(`Token found. Redirecting to ${redirectPath}.`);
+                    // Avoid immediate redirect on load for a fraction of a second to prevent flicker
+                    setTimeout(() => {
+                        window.location.href = redirectPath;
+                    }, 100); 
+                }
             }
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            const token = localStorage.getItem('token');
-            
-            if (isLoggedIn === 'true' || token) {
-                showNotification('You are already logged in. Redirecting...', 'success');
-                setTimeout(() => {
-                    window.location.href = "fitvibe.html";
-                }, 1000);
-            }
-        });
-
-        form.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                form.dispatchEvent(new Event('submit'));
-            }
-        });
-        
-        document.querySelector('.forgot-password a').addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = 'forget.html';
-        });
-        
-        document.querySelector('.signup-link a').addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = 'sign.html';
         });
     </script>
 </body>

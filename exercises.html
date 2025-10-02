@@ -38,6 +38,10 @@
   </div>
 
   <script>
+    // API Configuration
+    const API_URL = 'http://localhost:5000/api';
+    let authToken = localStorage.getItem('fitvibeToken') || sessionStorage.getItem('fitvibeToken');
+    
     // Global variables
     let favorites = JSON.parse(localStorage.getItem('workoutFavorites')) || [];
     let currentVideoId = '';
@@ -141,6 +145,11 @@
       modal.classList.add('show');
       overlay.classList.add('show');
       document.body.style.overflow = 'hidden';
+      
+      // Track workout session start
+      if (authToken) {
+        trackWorkoutStart(videoId);
+      }
     }
 
     function closeVideoModal() {
@@ -148,10 +157,16 @@
       const overlay = document.getElementById('modalOverlay');
       const iframe = document.getElementById('modalVideo');
       
+      // Track workout completion before closing
+      if (authToken && currentVideoId) {
+        trackWorkoutCompletion(currentVideoId);
+      }
+      
       iframe.src = '';
       modal.classList.remove('show');
       overlay.classList.remove('show');
       document.body.style.overflow = 'auto';
+      currentVideoId = '';
     }
 
     // Favorites Functions
@@ -1286,7 +1301,7 @@
   <!-- Navigation Bar -->
   <nav class="top-nav">
     <div class="nav-container">
-      <a href="FitVibe.html" class="back-btn">
+      <a href="fitvibe.html" class="back-btn">
         <i class="fas fa-arrow-left"></i> Back to Home
       </a>
       <div class="nav-actions">
@@ -1382,6 +1397,77 @@
             <span class="tag">No Equipment</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('dJlFmxiL11s')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1412,6 +1498,77 @@
             <span class="tag">Form Focus</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('cbKkB3POqaY')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1442,6 +1599,77 @@
             <span class="tag">Cardio</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('ml6cT4AZdqI')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1472,6 +1700,77 @@
             <span class="tag">Quick</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('2pLT-olgUJs')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1502,6 +1801,77 @@
             <span class="tag">Quick</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('rBuVM7fOE1Q')">
               <i class="fas" fa-play"></i> Watch Now
             </button>
@@ -1532,6 +1902,77 @@
             <span class="tag">Gentle</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('X655B4ISakg')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1563,6 +2004,77 @@
           </div>
           <div class="video-actions">
             <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
               <i class="fas fa-play"></i> Watch Now
             </button>
             <button class="action-btn" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
@@ -1592,6 +2104,77 @@
             <span class="tag">Effective</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('oAPCPjnU1wA')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1622,6 +2205,77 @@
             <span class="tag">No Floor</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('VHyGqsPOUHs')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1652,6 +2306,77 @@
             <span class="tag">Cardio</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('ml6cT4AZdqI')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1682,6 +2407,77 @@
             <span class="tag">Quick</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('2pLT-olgUJs')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1712,6 +2508,77 @@
             <span class="tag">Quick</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('rBuVM7fOE1Q')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1742,6 +2609,77 @@
             <span class="tag">Gentle</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>
             <button class="action-btn primary" onclick="playVideo('X655B4ISakg')">
               <i class="fas fa-play"></i> Watch Now
             </button>
@@ -1772,3 +2710,74 @@
             <span class="tag">Relaxing</span>
           </div>
           <div class="video-actions">
+            <button class="action-btn primary" onclick="playVideo('I9nG-G4B5Bs')">
+              <i class="fas fa-play"></i> Start Workout
+            </button>
+            <button class="action-btn secondary" onclick="addToFavorites('Stretch & Flexibility', 'I9nG-G4B5Bs', '20 min', 'beginner')">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workout tracking functions -->
+  <script>
+    // Workout tracking functions
+    let workoutStartTime = null;
+
+    async function trackWorkoutStart(videoId) {
+      workoutStartTime = new Date();
+      try {
+        const response = await fetch(`${API_URL}/workouts/start-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            workout_type: 'video'
+          })
+        });
+
+        if (response.ok) {
+          console.log('Workout session started');
+        }
+      } catch (error) {
+        console.error('Error tracking workout start:', error);
+      }
+    }
+
+    async function trackWorkoutCompletion(videoId) {
+      if (!workoutStartTime) return;
+      
+      const duration = Math.round((new Date() - workoutStartTime) / 1000 / 60); // minutes
+      
+      try {
+        const response = await fetch(`${API_URL}/workouts/complete-session`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            workout_id: videoId,
+            duration_minutes: duration,
+            calories_burned: Math.round(duration * 5) // Rough estimate
+          })
+        });
+
+        if (response.ok) {
+          showToast(`Great job! Workout completed in ${duration} minutes`, 'success');
+        }
+      } catch (error) {
+        console.error('Error tracking workout completion:', error);
+      }
+      
+      workoutStartTime = null;
+    }
+  </script>
+</body>
+</html>

@@ -1,88 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FitVibe: Zumba Workout</title>
-  <style>
-    body {
-      background-color: #0d0d0d;
-      color: #cc99ff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      text-align: center;
-      padding: 2rem;
-    }
-
-    h1 {
-      margin-bottom: 1.5rem;
-      color: #e6ccff;
-    }
-
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .video-card {
-      background-color: #1a1a1a;
-      border-radius: 15px;
-      box-shadow: 0 0 15px #cc99ff;
-      padding: 1rem;
-      transition: transform 0.3s ease;
-    }
-
-    .video-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px #e6ccff;
-    }
-
-    iframe {
-      width: 100%;
-      height: 200px;
-      border-radius: 10px;
-    }
-
-    .video-title {
-      margin-top: 1rem;
-      font-weight: bold;
-      font-size: 1rem;
-      color: #ffffff;
-    }
-
-    @media (max-width: 700px) {
-      .video-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitVibe: Zumba Workout</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to refine the aesthetic and interactivity */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0d0d; /* Deep Dark Background */
+        }
+        /* Define a vibrant magenta color scheme */
+        .text-vibe {
+            color: #ff00cc; /* Primary Magenta Accent */
+        }
+        .bg-vibe {
+            background-color: #ff00cc;
+        }
+        .border-vibe {
+            border-color: #ff00cc;
+        }
+        /* Custom glow effect for the video/cards */
+        .shadow-vibe-glow {
+            box-shadow: 0 0 15px rgba(255, 0, 204, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .shadow-vibe-glow:hover {
+            box-shadow: 0 0 30px rgba(255, 0, 204, 0.8);
+            transform: translateY(-4px);
+        }
+        /* Style for the iframe container aspect ratio */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
-<body>
-  <h1>💃 FitVibe Zumba Workout</h1>
-  <p>Follow these Zumba workouts to get moving and stay fit!</p>
+<body class="text-white min-h-screen">
 
-  <div class="video-grid">
-    <div class="video-card">
-      <iframe src="https://www.youtube.com/embed/9_MxwQw10RI" frameborder="0" allowfullscreen></iframe>
-      <div class="video-title">10‑Min Zumba Beginner</div>
-    </div>
+    <header class="py-8 bg-gray-900 shadow-xl border-b border-vibe/30">
+        <div class="max-w-6xl mx-auto px-4">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-vibe tracking-wide text-center">
+                💃 FitVibe Zumba Workouts
+            </h1>
+            <p class="text-lg text-gray-400 mt-2 text-center">
+                Ignite your energy with the best dance fitness sessions. Find your flow!
+            </p>
+        </div>
+    </header>
 
-    <div class="video-card">
-      <iframe src="https://www.youtube.com/embed/mZeFvX3ALKY" frameborder="0" allowfullscreen></iframe>
-      <div class="video-title">30‑Min Beginner Latin Zumba</div>
-    </div>
+    <main class="max-w-6xl mx-auto py-12 px-4">
+        
+        <!-- Search/Filter Bar -->
+        <div class="mb-10">
+            <input type="text" id="search-input" placeholder="Search by title or difficulty (e.g., Beginner, Cardio)..." 
+                   class="w-full p-4 rounded-xl bg-gray-800 border-2 border-gray-700 text-white placeholder-gray-500 
+                          focus:border-vibe focus:ring-2 focus:ring-vibe/50 transition duration-200 shadow-lg">
+        </div>
 
-    <div class="video-card">
-      <iframe src="https://www.youtube.com/embed/8DZktowZo_k" frameborder="0" allowfullscreen></iframe>
-      <div class="video-title">30‑Min Cardio Latin Dance</div>
-    </div>
+        <!-- Video Grid Container (Target for JS rendering) -->
+        <div id="video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Video cards will be injected here by JavaScript -->
+        </div>
 
-    <div class="video-card">
-      <iframe src="https://www.youtube.com/embed/7riltpIqZv0" frameborder="0" allowfullscreen></iframe>
-      <div class="video-title">15‑Min Zumba Dance Party</div>
-    </div>
-  </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-vibe/30 mt-12">
+        <div class="max-w-6xl mx-auto py-6 px-4 text-center text-gray-400">
+            <p>&copy; 2025 FitVibe Dance. Get fit, feel the vibe! 💖</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Video Data and Filtering -->
+    <script>
+        // 1. Video Data Source
+        const videoData = [
+            { id: 1, title: "10-Min Zumba Beginner Warmup", src: "https://www.youtube.com/embed/9_MxwQw10RI", duration: "10 min", level: "Beginner" },
+            { id: 2, title: "30-Min Latin Dance Cardio", src: "https://www.youtube.com/embed/mZeFvX3ALKY", duration: "30 min", level: "Intermediate" },
+            { id: 3, title: "45-Min High Energy Full Workout", src: "https://www.youtube.com/embed/8DZktowZo_k", duration: "45 min", level: "Advanced" },
+            { id: 4, title: "15-Min Feel-Good Dance Party", src: "https://www.youtube.com/embed/7riltpIqZv0", duration: "15 min", level: "All Levels" },
+            { id: 5, title: "20-Min Low Impact Warmup Flow", src: "https://www.youtube.com/embed/Cg84l5N_fG8", duration: "20 min", level: "Beginner" },
+            { id: 6, title: "60-Min Full Body Intensity", src: "https://www.youtube.com/embed/w7d76hCqBvE", duration: "60 min", level: "Advanced" },
+            { id: 7, title: "12-Min Quick Calorie Burn", src: "https://www.youtube.com/embed/Rk0W9u84YwA", duration: "12 min", level: "Intermediate" },
+            { id: 8, title: "40-Min Merengue Rhythm Session", src: "https://www.youtube.com/embed/rQn_9eW01n4", duration: "40 min", level: "Intermediate" }
+        ];
+
+        const gridElement = document.getElementById('video-grid');
+        const searchInput = document.getElementById('search-input');
+
+        /**
+         * Renders the video cards based on a provided array of videos.
+         * @param {Array<Object>} videosToRender - The array of video objects to display.
+         */
+        function renderVideos(videosToRender) {
+            gridElement.innerHTML = ''; // Clear existing cards
+
+            if (videosToRender.length === 0) {
+                gridElement.innerHTML = '<p class="col-span-full text-center text-xl text-gray-500 py-10">No workouts match your search criteria. Try a different term!</p>';
+                return;
+            }
+
+            videosToRender.forEach(video => {
+                const card = document.createElement('div');
+                
+                // Determine color for level tag
+                let levelColor = '';
+                switch(video.level) {
+                    case 'Beginner':
+                        levelColor = 'bg-green-500/80';
+                        break;
+                    case 'Intermediate':
+                        levelColor = 'bg-yellow-500/80';
+                        break;
+                    case 'Advanced':
+                        levelColor = 'bg-red-500/80';
+                        break;
+                    default:
+                        levelColor = 'bg-blue-500/80';
+                }
+
+                card.className = 'bg-gray-800 p-4 rounded-xl shadow-vibe-glow hover:bg-gray-700/70 cursor-pointer';
+                card.innerHTML = `
+                    <div class="video-container rounded-lg overflow-hidden mb-4">
+                        <iframe 
+                            src="${video.src}" 
+                            title="${video.title}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-2 text-vibe">${video.title}</h3>
+                    
+                    <div class="flex justify-between items-center text-sm font-medium text-gray-300">
+                        <span class="p-1 rounded-full text-xs font-bold text-gray-900 ${levelColor}">
+                            ${video.level}
+                        </span>
+                        <span class="flex items-center space-x-1">
+                            <!-- Clock icon (Inline SVG) -->
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>${video.duration}</span>
+                        </span>
+                    </div>
+                `;
+                
+                // Add click listener to highlight the card or start playback (mock interaction)
+                card.addEventListener('click', () => {
+                    console.log('Video clicked:', video.title);
+                    card.classList.add('ring-4', 'ring-vibe');
+                    setTimeout(() => card.classList.remove('ring-4', 'ring-vibe'), 1000);
+                });
+
+                gridElement.appendChild(card);
+            });
+        }
+
+        /**
+         * Filters videos based on the search input value.
+         */
+        function filterVideos() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredVideos = videoData.filter(video => 
+                video.title.toLowerCase().includes(searchTerm) ||
+                video.level.toLowerCase().includes(searchTerm) ||
+                video.duration.toLowerCase().includes(searchTerm)
+            );
+            renderVideos(filteredVideos);
+        }
+
+        // 3. Setup Listeners and Initial Load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial render of all videos
+            renderVideos(videoData);
+            
+            // Listen for input changes to filter videos dynamically
+            searchInput.addEventListener('input', filterVideos);
+        });
+
+    </script>
+
 </body>
 </html>

@@ -537,6 +537,10 @@
   </div>
 
   <script>
+    // API Configuration
+    const API_URL = 'http://localhost:5000/api';
+    let authToken = localStorage.getItem('fitvibeToken') || sessionStorage.getItem('fitvibeToken');
+    
     let currentUnit = 'metric';
     let animationId;
 
@@ -787,6 +791,11 @@
           // Update BMI scale
           updateBMIScale(bmi);
           
+          // Save BMI data to backend if user is logged in
+          if (authToken) {
+            saveBMIData(bmi, weight, heightInMeters, category);
+          }
+          
           // Show result with animation
           setTimeout(() => {
             document.getElementById('bmi-result').classList.add('show');
@@ -826,6 +835,33 @@
         this.parentElement.style.transform = 'scale(1)';
       });
     });
+
+    // Save BMI data to backend
+    async function saveBMIData(bmi, weight, height, category) {
+      try {
+        const response = await fetch(`${API_URL}/bmi/calculate`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            weight_kg: weight,
+            height_cm: height * 100, // Convert back to cm
+            bmi: bmi,
+            category: category
+          })
+        });
+
+        if (response.ok) {
+          console.log('BMI data saved successfully');
+        } else {
+          console.warn('Failed to save BMI data');
+        }
+      } catch (error) {
+        console.error('Error saving BMI data:', error);
+      }
+    }
   </script>
 </body>
 </html>

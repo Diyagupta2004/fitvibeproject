@@ -803,35 +803,30 @@
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
 
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    let cart = JSON.parse(localStorage.getItem('fitvibeCart')) || [];
+    const authToken = localStorage.getItem('fitvibeToken') || sessionStorage.getItem('fitvibeToken');
+    const isLoggedIn = !!authToken;
 
-    // Sample cart items for demo
-    if (cart.length === 0) {
-      cart = [
-        {
-          name: "Premium Membership",
-          price: 2999,
-          quantity: 1,
-          description: "Access to all premium features",
-          features: ["Unlimited Access", "Personal Trainer", "Nutrition Guide"]
-        },
-        {
-          name: "Fitness Tracker",
-          price: 1499,
-          quantity: 2,
-          description: "Advanced fitness tracking device",
-          features: ["Heart Rate Monitor", "GPS", "Waterproof"]
-        },
-        {
-          name: "Protein Powder",
-          price: 899,
-          quantity: 1,
-          description: "High-quality whey protein",
-          features: ["25g Protein", "BCAA", "Natural Flavors"]
-        }
-      ];
-      localStorage.setItem('cart', JSON.stringify(cart));
+    // Load real cart items from localStorage
+    console.log('Cart loaded:', cart);
+
+    // Helper functions to get plan details
+    function getDescriptionForPlan(planType) {
+      const descriptions = {
+        'basic': 'Perfect for beginners starting their fitness journey',
+        'premium': 'Most popular plan with premium features and personal training',
+        'elite': 'Ultimate fitness experience with exclusive benefits'
+      };
+      return descriptions[planType] || 'Fitness subscription plan';
+    }
+
+    function getFeaturesForPlan(planType) {
+      const features = {
+        'basic': ['Gym Access', 'Basic Workouts', 'Mobile App', 'Community Support'],
+        'premium': ['All Basic Features', 'Personal Trainer', 'Nutrition Plans', 'Priority Support'],
+        'elite': ['All Premium Features', 'VIP Access', 'Exclusive Events', '24/7 Support']
+      };
+      return features[planType] || ['Fitness Plan'];
     }
 
     const promoCodes = {
@@ -853,19 +848,28 @@
             <a href="pricing.html" class="shop-btn">
               <i class="fas fa-plus"></i> Start Shopping
             </a>
+            <button onclick="clearCart()" class="shop-btn" style="background: #dc3545; margin-top: 10px;">
+              <i class="fas fa-trash"></i> Clear Cart (Debug)
+            </button>
           </div>
         `;
         updateSummary();
         return;
       }
 
-      cartItemsDiv.innerHTML = cart.map((item, index) => `
+      cartItemsDiv.innerHTML = cart.map((item, index) => {
+        // Handle both old and new data structures
+        const quantity = item.quantity || 1;
+        const description = item.description || getDescriptionForPlan(item.type);
+        const features = item.features || getFeaturesForPlan(item.type);
+        
+        return `
         <div class="cart-item" style="--item-index: ${index}">
           <div class="item-info">
             <h3>${item.name}</h3>
-            <div class="item-description">${item.description}</div>
+            <div class="item-description">${description}</div>
             <div class="item-features">
-              ${item.features.map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
+              ${features.map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
             </div>
           </div>
           <div class="item-controls">
@@ -873,23 +877,29 @@
               <button class="qty-btn" onclick="updateQuantity(${index}, -1)">
                 <i class="fas fa-minus"></i>
               </button>
-              <span class="quantity">${item.quantity}</span>
+              <span class="quantity">${quantity}</span>
               <button class="qty-btn" onclick="updateQuantity(${index}, 1)">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
-            <div class="item-price">₹${(item.price * item.quantity).toFixed(2)}</div>
+            <div class="item-price">₹${(item.price * quantity).toFixed(2)}</div>
             <button class="delete-btn" onclick="removeItem(${index})" title="Remove item">
               <i class="fas fa-trash"></i>
             </button>
           </div>
         </div>
-      `).join('');
+        `;
+      }).join('');
 
       updateSummary();
     }
 
     function updateQuantity(index, change) {
+      // Initialize quantity if it doesn't exist
+      if (!cart[index].quantity) {
+        cart[index].quantity = 1;
+      }
+      
       cart[index].quantity += change;
       
       if (cart[index].quantity <= 0) {
@@ -902,7 +912,7 @@
         showToast('Maximum quantity is 10', 'warning');
       }
       
-      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem('fitvibeCart', JSON.stringify(cart));
       renderCart();
       showToast('Quantity updated', 'success');
     }
@@ -910,10 +920,84 @@
     function removeItem(index) {
       const itemName = cart[index].name;
       cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem('fitvibeCart', JSON.stringify(cart));
       renderCart();
       showToast(`${itemName} removed from cart`, 'success');
     }
 
     function updateSummary() {
-      const subtotal = cart.reduce((
+      const subtotal = cart.reduce((total, item) => {
+        const quantity = item.quantity || 1;
+        return total + (item.price * quantity);
+      }, 0);
+      
+      const discount = (subtotal * appliedDiscount) / 100;
+      const total = subtotal - discount;
+      
+      document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+      document.getElementById('discount').textContent = `₹${discount.toFixed(2)}`;
+      document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
+    }
+
+    function applyPromoCode() {
+      const promoInput = document.getElementById('promo-input');
+      const promoCode = promoInput.value.trim().toUpperCase();
+      
+      if (promoCodes[promoCode]) {
+        appliedDiscount = promoCodes[promoCode];
+        updateSummary();
+        showToast(`Promo code applied! ${appliedDiscount}% discount`, 'success');
+        promoInput.value = '';
+      } else {
+        showToast('Invalid promo code', 'error');
+      }
+    }
+
+    function showToast(message, type = 'success') {
+      toastMessage.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function proceedToCheckout() {
+      if (cart.length === 0) {
+        showToast('Your cart is empty', 'error');
+        return;
+      }
+      
+      if (!isLoggedIn) {
+        showToast('Please login to proceed', 'error');
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+        return;
+      }
+      
+      showToast('Redirecting to payment...', 'success');
+      setTimeout(() => {
+        window.location.href = 'payment.html';
+      }, 1500);
+    }
+
+    // Clear any old sample data and initialize cart display
+    function initializeCart() {
+      // Remove any items that don't have the proper structure
+      cart = cart.filter(item => item.type && item.name && item.price);
+      localStorage.setItem('fitvibeCart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    // Clear cart function for debugging
+    function clearCart() {
+      cart = [];
+      localStorage.setItem('fitvibeCart', JSON.stringify(cart));
+      renderCart();
+      showToast('Cart cleared!', 'success');
+    }
+
+    // Initialize cart display
+    initializeCart();

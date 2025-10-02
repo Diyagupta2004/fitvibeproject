@@ -1,39 +1,237 @@
-<section style="padding: 4rem 2rem; background-color: #0d0d0d; color: #f2e6ff; font-family: 'Segoe UI', sans-serif;">
-  <div style="max-width: 1200px; margin: auto;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoga Harmony: Balance Your Body & Mind</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to refine the aesthetic and interactivity */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a; /* Deep, dark background */
+        }
+        .text-accent {
+            color: #cc66ff; /* Primary Purple Accent */
+        }
+        .bg-accent {
+            background-color: #cc66ff;
+        }
+        /* Custom glow effect for the video/cards */
+        .shadow-glow {
+            box-shadow: 0 0 30px rgba(204, 102, 255, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .shadow-glow:hover {
+            box-shadow: 0 0 50px rgba(204, 102, 255, 0.8);
+            transform: translateY(-4px);
+        }
+        /* Smooth scrolling behavior for internal links */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
 
-    <!-- Heading -->
-    <h2 style="font-size: 3rem; font-weight: 600; text-align: center; margin-bottom: 3rem; color: #cc66ff;">
-      Yoga: Balance Your Body & Mind
-    </h2>
+    <!-- Sticky Navigation Bar -->
+    <nav class="sticky top-0 z-50 bg-gray-900/90 backdrop-blur-sm shadow-md border-b border-purple-500/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="#home" class="flex items-center">
+                    <span class="text-2xl font-bold text-accent">FitVibe</span>
+                </a>
+                <div class="flex space-x-4">
+                    <a href="#home" class="text-white hover:text-accent font-medium transition duration-150 ease-in-out">Home</a>
+                    <a href="#styles" class="text-white hover:text-accent font-medium transition duration-150 ease-in-out">Styles</a>
+                    <a href="#resources" class="text-white hover:text-accent font-medium transition duration-150 ease-in-out">Resources</a>
+                    <a href="#contact" class="text-white hover:text-accent font-medium transition duration-150 ease-in-out">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-    <div style="display: flex; flex-wrap: wrap; gap: 3rem; align-items: center; justify-content: space-between;">
+    <!-- 1. HERO SECTION (Original Content Refined) -->
+    <section id="home" class="py-16 md:py-24 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-center mb-2 text-accent tracking-wider">
+                Balance Your Body & Mind
+            </h1>
+            <p class="text-xl text-gray-400 text-center mb-12">
+                Ancient Wisdom for Modern Stress
+            </p>
 
-      <!-- Video Preview -->
-      <div style="flex: 1 1 45%; border-radius: 16px; overflow: hidden; box-shadow: 0 0 40px rgba(204, 102, 255, 0.1);">
-        <iframe 
-          src="https://www.youtube.com/embed/v7AYKMP6rOE" 
-          title="Yoga for Beginners" 
-          style="width: 100%; height: 320px; border: none; border-radius: 16px;" 
-          allowfullscreen>
-        </iframe>
-      </div>
+            <div class="flex flex-col md:flex-row gap-8 lg:gap-16 items-center">
+                
+                <!-- Video Preview with Glow Effect -->
+                <div class="w-full md:w-1/2 rounded-xl overflow-hidden shadow-glow">
+                    <iframe 
+                        src="https://www.youtube.com/embed/v7AYKMP6rOE" 
+                        title="Yoga for Beginners" 
+                        class="w-full h-80 md:h-96 border-none" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
 
-      <!-- Content Box -->
-      <div style="flex: 1 1 45%;">
-        <h3 style="font-size: 1.6rem; margin-bottom: 1rem; color: #e6ccff;">Why Yoga?</h3>
-        <ul style="list-style: none; padding: 0; font-size: 1rem; line-height: 1.8;">
-          <li><span style="color: #cc66ff;">✔</span> Boosts flexibility & posture</li>
-          <li><span style="color: #cc66ff;">✔</span> Reduces anxiety & stress</li>
-          <li><span style="color: #cc66ff;">✔</span> Strengthens core & muscles</li>
-          <li><span style="color: #cc66ff;">✔</span> Enhances breathing control</li>
-        </ul>
-        <a href="#start-yoga" 
-           style="display: inline-block; margin-top: 2rem; background: #cc66ff; color: #fff; padding: 0.8rem 1.6rem; border-radius: 50px; text-decoration: none; font-weight: 600; transition: 0.3s;">
-          Start Yoga Practice
-        </a>
-      </div>
+                <!-- Content Box (Benefits) -->
+                <div class="w-full md:w-1/2">
+                    <h2 class="text-3xl font-semibold mb-6 text-purple-300">Why Start Your Yoga Journey?</h2>
+                    <ul class="space-y-4 text-lg text-gray-300">
+                        <li class="flex items-start">
+                            <span class="text-accent text-2xl mr-3 leading-none">🧘</span> 
+                            **Boosts Flexibility** & Posture: Unlock greater range of motion and core strength.
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-accent text-2xl mr-3 leading-none">🧠</span> 
+                            **Reduces Anxiety** & Stress: Calm the nervous system with mindful movement.
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-accent text-2xl mr-3 leading-none">💪</span> 
+                            **Strengthens Core** & Muscles: Build lean muscle endurance across your entire body.
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-accent text-2xl mr-3 leading-none">🌬️</span> 
+                            **Enhances Breathing** Control: Improve lung capacity and energy levels (Pranayama).
+                        </li>
+                    </ul>
+                    <a href="#styles" 
+                       class="mt-10 inline-block bg-accent hover:bg-purple-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-lg shadow-purple-500/50">
+                        Explore Yoga Styles
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    </div>
+    <!-- 2. STYLES OF YOGA SECTION (New Content) -->
+    <section id="styles" class="py-16 md:py-24 px-4 bg-gray-800/50 border-t border-b border-purple-500/20">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 text-purple-300">Find Your Flow: Popular Yoga Styles</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Hatha Card -->
+                <div class="bg-gray-800 p-6 rounded-xl border border-purple-500/30 shadow-glow hover:shadow-glow/70">
+                    <h3 class="text-2xl font-semibold mb-3 text-accent">Hatha Yoga</h3>
+                    <p class="text-gray-400 mb-4">
+                        A gentle, classic introduction focusing on fundamental poses (asanas) and breathing (pranayama). Perfect for beginners seeking alignment and stability.
+                    </p>
+                    <a href="#" class="text-sm font-medium text-purple-400 hover:text-white transition-colors">Read More about Hatha &rarr;</a>
+                </div>
+                
+                <!-- Vinyasa Card -->
+                <div class="bg-gray-800 p-6 rounded-xl border border-purple-500/30 shadow-glow hover:shadow-glow/70">
+                    <h3 class="text-2xl font-semibold mb-3 text-accent">Vinyasa Flow</h3>
+                    <p class="text-gray-400 mb-4">
+                        Known as 'flow yoga,' Vinyasa links movement with breath in a continuous, dynamic series. Great for building heat, endurance, and cardiovascular health.
+                    </p>
+                    <a href="#" class="text-sm font-medium text-purple-400 hover:text-white transition-colors">Find a Vinyasa Class &rarr;</a>
+                </div>
+                
+                <!-- Restorative Card -->
+                <div class="bg-gray-800 p-6 rounded-xl border border-purple-500/30 shadow-glow hover:shadow-glow/70">
+                    <h3 class="text-2xl font-semibold mb-3 text-accent">Restorative Yoga</h3>
+                    <p class="text-gray-400 mb-4">
+                        A slower practice using props (blankets, bolsters) to support the body in passive poses for deep relaxation and healing. Ideal for stress relief.
+                    </p>
+                    <a href="#" class="text-sm font-medium text-purple-400 hover:text-white transition-colors">Explore Restorative Poses &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  </div>
-</section>
+    <!-- 3. RESOURCES & CONTACT SECTION (New Content with More Links) -->
+    <section id="resources" class="py-16 md:py-24 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 text-purple-300">Resources & Next Steps</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                
+                <!-- Link 1 -->
+                <a href="#" class="p-6 bg-gray-800 rounded-lg transition duration-300 hover:bg-accent/20 border border-gray-700 hover:border-accent">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Beginner's Guide</h3>
+                    <p class="text-gray-400">Everything you need to know before your first class.</p>
+                </a>
+                
+                <!-- Link 2 -->
+                <a href="#" class="p-6 bg-gray-800 rounded-lg transition duration-300 hover:bg-accent/20 border border-gray-700 hover:border-accent">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Meditation Audios</h3>
+                    <p class="text-gray-400">Guided practices for focus and calm.</p>
+                </a>
+                
+                <!-- Link 3 (Contact) -->
+                <a href="#contact" class="p-6 bg-gray-800 rounded-lg transition duration-300 hover:bg-accent/20 border border-gray-700 hover:border-accent">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Book a Session</h3>
+                    <p class="text-gray-400">Schedule a 1-on-1 virtual or in-person session.</p>
+                </a>
+                
+                <!-- Link 4 -->
+                <a href="#" class="p-6 bg-gray-800 rounded-lg transition duration-300 hover:bg-accent/20 border border-gray-700 hover:border-accent">
+                    <h3 class="text-xl font-semibold text-accent mb-2">Yoga Blog</h3>
+                    <p class="text-gray-400">Latest articles on wellness and philosophy.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 4. CONTACT SECTION (Simple Form Placeholder) -->
+    <section id="contact" class="py-16 px-4 bg-gray-800/50">
+        <div class="max-w-xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-purple-300 mb-6">Get In Touch</h2>
+            <p class="text-gray-400 mb-8">Have questions? Send us a message and we'll reply within 24 hours.</p>
+            
+            <!-- Simple Contact Form -->
+            <form class="space-y-4">
+                <input type="text" placeholder="Your Name" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:border-accent focus:ring focus:ring-accent/50 outline-none">
+                <input type="email" placeholder="Your Email" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:border-accent focus:ring focus:ring-accent/50 outline-none">
+                <textarea placeholder="Your Message" rows="4" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:border-accent focus:ring focus:ring-accent/50 outline-none"></textarea>
+                <button type="submit" class="w-full bg-accent hover:bg-purple-600 text-white font-bold py-3 rounded-lg transition duration-300 shadow-lg shadow-purple-500/50">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-purple-500/20 mt-12">
+        <div class="max-w-7xl mx-auto py-8 px-4 text-center text-gray-400">
+            <div class="flex justify-center space-x-6 mb-4 text-sm">
+                <a href="#" class="hover:text-accent transition-colors">FAQ</a>
+                <a href="#" class="hover:text-accent transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-accent transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-accent transition-colors">Affiliates</a>
+            </div>
+            <p>&copy; 2025 Yoga Harmony. All rights reserved. | Namaste</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Smooth Scrolling -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Check if the link is meant for smooth scrolling
+                if (this.getAttribute('href').length > 1) { 
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        // Calculate offset to account for the sticky header height (64px = h-16)
+                        const headerHeight = 64; 
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

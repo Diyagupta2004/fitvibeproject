@@ -2,176 +2,450 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FitVibe - Payment</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitVibe - Secure Checkout</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* Custom styles for gradient text and Inter font */
+        .gradient-text {
+            background-image: linear-gradient(to right, #a78bfa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121212;
-      color: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-    .payment-container {
-      background-color: #1e1e1e;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(138, 43, 226, 0.2);
-      width: 100%;
-      max-width: 450px;
-    }
+        /* Hide the default radio button */
+        .radio-label input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
-    .payment-container h2 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 2rem;
-      background: linear-gradient(to right, #a78bfa, #c084fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+        /* Style the visible part of the radio button */
+        .radio-indicator {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            border: 2px solid #555;
+            transition: all 0.2s;
+        }
 
-    .input-group {
-      margin-bottom: 20px;
-    }
+        /* Style when selected */
+        .radio-label input:checked ~ .radio-indicator {
+            border-color: #c084fc;
+        }
 
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 0.95rem;
-      color: #ccc;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background-color: #2a2a2a;
-      color: #fff;
-      font-size: 1rem;
-    }
-
-    input::placeholder {
-      color: #888;
-    }
-
-    .payment-methods {
-      margin-bottom: 25px;
-      display: flex;
-      justify-content: space-around;
-    }
-
-    .payment-methods i {
-      font-size: 1.8rem;
-      color: #888;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    .payment-methods i.active {
-      color: #c084fc;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      background-color: #a78bfa;
-      color: black;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #c084fc;
-    }
-
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: #4caf50;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      display: none;
-      z-index: 999;
-    }
-  </style>
+        .radio-label input:checked ~ .radio-indicator:after {
+            content: '';
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background-color: #c084fc;
+            display: block;
+            margin: 1.5px; /* Center the dot */
+        }
+        
+        /* Input focus style override */
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.4);
+            border-color: #c084fc;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-purple': '#a78bfa',
+                        'secondary-purple': '#c084fc',
+                        'dark-bg': '#1e1e1e',
+                        'dark-input': '#2a2a2a',
+                        'light-bg': '#242424', /* for the summary box */
+                    },
+                }
+            }
+        }
+    </script>
 </head>
 
 <body>
-  <div class="payment-container">
-    <h2>Payment Details</h2>
+    <!-- Main Checkout Container -->
+    <div class="w-full max-w-5xl bg-dark-bg rounded-2xl shadow-2xl shadow-purple-900/40 p-0 overflow-hidden">
+        
+        <!-- Header Section (Matches K logo style) -->
+        <header class="p-6 border-b border-gray-700">
+            <div class="flex items-center space-x-4">
+                <svg class="w-8 h-8 text-primary-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 17L8 7" />
+                    <path d="M12 21L12 3" />
+                    <path d="M8 7H16" />
+                </svg>
+                <span class="text-xl font-bold text-white">FitVibe Checkout</span>
+            </div>
+        </header>
 
-    <div class="payment-methods">
-      <i class="fab fa-cc-visa active" onclick="selectMethod(this)"></i>
-      <i class="fab fa-cc-mastercard" onclick="selectMethod(this)"></i>
-      <i class="fab fa-google-pay" onclick="selectMethod(this)"></i>
-      <i class="fab fa-cc-amex" onclick="selectMethod(this)"></i>
+        <!-- Two-Column Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3">
+
+            <!-- Left Column: Payment Options & Personal Info -->
+            <div class="lg:col-span-2 p-6 sm:p-8 space-y-8">
+                
+                <!-- Welcome/Greeting Section -->
+                <div class="text-white">
+                    <h3 class="text-2xl font-semibold mb-1">Hi FitVibe User!</h3>
+                    <p class="text-gray-400">Pay for your subscription.</p>
+                </div>
+
+                <!-- Google Pay Button (Always prominent) -->
+                <div class="bg-black/50 p-4 rounded-xl border border-gray-700 flex justify-center hover:bg-black/70 transition duration-200 cursor-pointer">
+                    <i class="fab fa-google-pay text-3xl text-white mr-2"></i>
+                    <span class="text-lg font-bold text-white">G Pay</span>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-white mt-8 mb-4 border-b border-gray-800 pb-2">Select Payment Method</h3>
+                
+                <!-- Payment Options List -->
+                <div id="payment-options" class="space-y-3">
+                    
+                    <!-- 1. Card Option -->
+                    <label class="radio-label block">
+                        <input type="radio" name="payment-method" value="Card" checked onchange="toggleCardDetails('Card')">
+                        <div class="flex items-center justify-between p-4 bg-light-bg rounded-lg border border-transparent hover:border-primary-purple transition duration-200 cursor-pointer">
+                            <div class="flex items-center">
+                                <i class="fas fa-credit-card text-primary-purple mr-3"></i>
+                                <span class="text-white font-medium">Card</span>
+                            </div>
+                            <div class="flex space-x-1">
+                                <i class="fab fa-cc-visa text-lg text-gray-400"></i>
+                                <i class="fab fa-cc-mastercard text-lg text-gray-400"></i>
+                                <i class="fab fa-cc-amex text-lg text-gray-400"></i>
+                                <!-- Custom Radio Indicator -->
+                                <div class="radio-indicator ml-4"></div>
+                            </div>
+                        </div>
+                    </label>
+
+                    <!-- Card Details Input (Conditional) -->
+                    <div id="card-details-fields" class="pl-8 pt-2 pb-4 space-y-4">
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                                <label for="cardnumber" class="block text-sm font-medium text-gray-400 mb-2">Card Number</label>
+                                <input type="text" id="cardnumber" placeholder="1234 5678 9012 3456" maxlength="19" required
+                                    class="w-full p-3 rounded-lg bg-dark-input text-white tracking-wider border border-secondary-purple/30 transition duration-200" />
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                                <label for="expiry" class="block text-sm font-medium text-gray-400 mb-2">Expiry (MM/YY)</label>
+                                <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required
+                                    class="w-full p-3 rounded-lg bg-dark-input text-white border border-transparent transition duration-200" />
+                            </div>
+                            <div class="flex-1">
+                                <label for="cvv" class="block text-sm font-medium text-gray-400 mb-2">CVV</label>
+                                <input type="text" id="cvv" placeholder="123" maxlength="4" required
+                                    class="w-full p-3 rounded-lg bg-dark-input text-white border border-transparent transition duration-200" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. iDEAL Option -->
+                    <label class="radio-label block">
+                        <input type="radio" name="payment-method" value="iDEAL" onchange="toggleCardDetails('iDEAL')">
+                        <div class="flex items-center justify-between p-4 bg-light-bg rounded-lg border border-transparent hover:border-primary-purple transition duration-200 cursor-pointer">
+                            <div class="flex items-center">
+                                <i class="fas fa-bank text-primary-purple mr-3"></i>
+                                <span class="text-white font-medium">iDEAL</span>
+                            </div>
+                            <div class="radio-indicator"></div>
+                        </div>
+                    </label>
+
+                    <!-- 3. Pay Later Option (Klarna style) -->
+                    <label class="radio-label block">
+                        <input type="radio" name="payment-method" value="PayLater" onchange="toggleCardDetails('PayLater')">
+                        <div class="flex items-center justify-between p-4 bg-light-bg rounded-lg border border-transparent hover:border-primary-purple transition duration-200 cursor-pointer">
+                            <div class="flex items-center">
+                                <span class="font-black text-xl text-pink-500 mr-3">K.</span>
+                                <span class="text-white font-medium">Pay later.</span>
+                            </div>
+                            <div class="radio-indicator"></div>
+                        </div>
+                    </label>
+
+                    <!-- 4. Sofort Option -->
+                    <label class="radio-label block">
+                        <input type="radio" name="payment-method" value="Sofort" onchange="toggleCardDetails('Sofort')">
+                        <div class="flex items-center justify-between p-4 bg-light-bg rounded-lg border border-transparent hover:border-primary-purple transition duration-200 cursor-pointer">
+                            <div class="flex items-center">
+                                <i class="fas fa-lock text-primary-purple mr-3"></i>
+                                <span class="text-white font-medium">Sofort</span>
+                            </div>
+                            <div class="radio-indicator"></div>
+                        </div>
+                    </label>
+
+                </div>
+
+                <!-- Personal Information -->
+                <div class="mt-8 pt-4 border-t border-gray-700">
+                    <h3 class="text-xl font-semibold text-white mb-4">Personal Information</h3>
+                    <div class="flex items-center p-3 bg-light-bg rounded-lg border border-gray-700">
+                        <i class="fas fa-envelope text-gray-400 mr-3"></i>
+                        <span class="text-gray-300">joe.bloggs@example.com</span>
+                    </div>
+                </div>
+
+                <!-- Pay Button (Movable depending on screen size, placed here for mobile first) -->
+                <form id="paymentForm">
+                    <button type="submit"
+                        class="w-full py-4 rounded-xl font-bold text-gray-900 bg-primary-purple transition duration-300 shadow-lg shadow-primary-purple/40 hover:bg-secondary-purple hover:shadow-secondary-purple/60 transform hover:-translate-y-0.5 active:scale-[0.98] active:shadow-none mt-6">
+                        Pay €1,749.96
+                    </button>
+                </form>
+
+            </div>
+
+            <!-- Right Column: Order Summary -->
+            <div class="lg:col-span-1 bg-light-bg p-6 sm:p-8 border-t lg:border-t-0 lg:border-l border-gray-700">
+                <h3 class="text-xl font-semibold text-white mb-6">Summary</h3>
+                
+                <div class="space-y-4">
+                    <!-- Item 1 -->
+                    <div class="flex justify-between items-start text-sm">
+                        <div>
+                            <p class="text-white">144Hz gaming monitor</p>
+                            <p class="text-gray-400 text-xs">Quantity 2 &times; €699.98 each</p>
+                        </div>
+                        <p class="text-white font-medium">€1,399.96</p>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="flex justify-between items-start text-sm">
+                        <div>
+                            <p class="text-white">Wireless gaming mouse</p>
+                            <p class="text-gray-400 text-xs">Quantity 1 &times; €149.99 each</p>
+                        </div>
+                        <p class="text-white font-medium">€149.99</p>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="flex justify-between items-start text-sm">
+                        <div>
+                            <p class="text-white">Mechanical switch keyboard with wrist rest</p>
+                            <p class="text-gray-400 text-xs">Quantity 1 &times; €199.99 each</p>
+                        </div>
+                        <p class="text-white font-medium">€199.99</p>
+                    </div>
+                </div>
+
+                <!-- Separator -->
+                <div class="border-t border-gray-700 my-6"></div>
+
+                <!-- Total -->
+                <div class="flex justify-between text-lg font-bold">
+                    <p class="text-white">Total order amount</p>
+                    <p class="text-secondary-purple">€1,749.96</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <form id="paymentForm">
-      <div class="input-group">
-        <label for="cardholder">Cardholder Name</label>
-        <input type="text" id="cardholder" placeholder="John Doe" required />
-      </div>
+    <!-- Notification Modal/Toast -->
+    <div id="notification"
+        class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-xl shadow-xl transition-all duration-300 opacity-0 transform translate-y-full pointer-events-none"
+        role="alert">
+        Payment Successful!
+    </div>
 
-      <div class="input-group">
-        <label for="cardnumber">Card Number</label>
-        <input type="text" id="cardnumber" placeholder="1234 5678 9012 3456" maxlength="19" required />
-      </div>
+    <script>
+        // --- API Configuration ---
+        const API_URL = 'http://localhost:5000/api';
+        let authToken = localStorage.getItem('fitvibeToken') || sessionStorage.getItem('fitvibeToken');
+        
+        // --- Element References ---
+        const form = document.getElementById("paymentForm");
+        const notification = document.getElementById("notification");
+        const cardnumberInput = document.getElementById("cardnumber");
+        const expiryInput = document.getElementById("expiry");
+        const cvvInput = document.getElementById("cvv");
+        const cardDetailsFields = document.getElementById("card-details-fields");
+        
+        // --- Payment Option Logic ---
 
-      <div class="input-group" style="display: flex; gap: 10px;">
-        <div style="flex: 1;">
-          <label for="expiry">Expiry</label>
-          <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required />
-        </div>
-        <div style="flex: 1;">
-          <label for="cvv">CVV</label>
-          <input type="text" id="cvv" placeholder="123" maxlength="4" required />
-        </div>
-      </div>
+        function toggleCardDetails(method) {
+            // Show card inputs only if 'Card' is the selected method
+            if (method === 'Card') {
+                cardDetailsFields.style.display = 'block';
+                cardnumberInput.required = true;
+                expiryInput.required = true;
+                cvvInput.required = true;
+            } else {
+                cardDetailsFields.style.display = 'none';
+                cardnumberInput.required = false;
+                expiryInput.required = false;
+                cvvInput.required = false;
+            }
+        }
 
-      <button type="submit">Pay Now</button>
-    </form>
-  </div>
+        // Initialize to ensure card fields are visible on load (since 'Card' is checked by default)
+        document.addEventListener('DOMContentLoaded', () => {
+            toggleCardDetails('Card');
+        });
 
-  <div class="notification" id="notification">Payment Successful!</div>
+        // --- Input Formatting Logic (Client-side UX) ---
 
-  <script>
-    function selectMethod(element) {
-      const methods = document.querySelectorAll('.payment-methods i');
-      methods.forEach(icon => icon.classList.remove('active'));
-      element.classList.add('active');
-    }
+        // 1. Card Number Formatting (spaces every 4 digits)
+        cardnumberInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\s+/g, '');
+            let formattedValue = '';
+            
+            // Format with spaces
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+            e.target.value = formattedValue;
+        });
 
-    const form = document.getElementById("paymentForm");
-    const notification = document.getElementById("notification");
+        // 2. Expiry Date Formatting (MM/YY)
+        expiryInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            let formattedValue = value;
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      notification.style.display = "block";
-      notification.textContent = "Payment Successful!";
-      setTimeout(() => {
-        notification.style.display = "none";
-        window.location.href = "FitVibe.html";
-      }, 2000);
-    });
-  </script>
+            // Enforce MM/YY format
+            if (value.length === 1 && value > 1) {
+                value = '0' + value;
+            }
+            if (value.length === 2 && e.inputType !== "deleteContentBackward") {
+                formattedValue = value + '/';
+            } else if (value.length > 2) {
+                formattedValue = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+
+            e.target.value = formattedValue;
+        });
+
+        // --- Form Submission Logic ---
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            // Check if user is logged in
+            if (!authToken) {
+                showNotification("Please login to make a payment.", 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                return;
+            }
+
+            const selectedMethod = document.querySelector('input[name="payment-method"]:checked').value;
+            
+            // Simple validation check for Card option
+            if (selectedMethod === 'Card' && (cardnumberInput.value.length < 19 || expiryInput.value.length < 5 || cvvInput.value.length < 3)) {
+                showNotification("Please enter valid card details.", 'error');
+                return;
+            }
+
+            // UI Loading State
+            const submitButton = form.querySelector('button');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Processing...';
+            submitButton.disabled = true;
+
+            try {
+                // Get payment details from URL parameters or form
+                const urlParams = new URLSearchParams(window.location.search);
+                const plan = urlParams.get('plan') || 'basic';
+                const amount = urlParams.get('amount') || '9.99';
+
+                let paymentData = {
+                    subscription_plan: plan,
+                    payment_method: selectedMethod.toLowerCase()
+                };
+
+                // Add card details if card payment
+                if (selectedMethod === 'Card') {
+                    paymentData.card_details = {
+                        number: cardnumberInput.value.replace(/\s/g, ''),
+                        expiry: expiryInput.value,
+                        cvv: cvvInput.value
+                    };
+                }
+
+                // Simple payment processing
+                const response = await fetch(`${API_URL}/payments/process-payment`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        subscription_plan: plan
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showNotification(`Payment via ${selectedMethod} successful!`, 'success');
+                    
+                    // Redirect to success page or dashboard
+                    setTimeout(() => {
+                        window.location.href = 'fitvibe.html?payment=success';
+                    }, 2500);
+                } else {
+                    showNotification(data.message || 'Payment failed. Please try again.', 'error');
+                }
+
+            } catch (error) {
+                console.error('Payment error:', error);
+                showNotification('Payment failed. Please check your connection and try again.', 'error');
+            } finally {
+                // Reset button state
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
+        });
+
+        // --- Notification Helper ---
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.classList.remove('opacity-0', 'translate-y-full', 'bg-red-600', 'bg-green-600');
+            
+            if (type === 'error') {
+                notification.classList.add('opacity-100', 'translate-y-0', 'bg-red-600');
+            } else {
+                notification.classList.add('opacity-100', 'translate-y-0', 'bg-green-600');
+            }
+
+            // Auto-hide notification
+            setTimeout(() => {
+                notification.classList.remove('opacity-100', 'translate-y-0');
+                notification.classList.add('opacity-0', 'translate-y-full');
+            }, 4000);
+        }
+    </script>
 </body>
 
 </html>

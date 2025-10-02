@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitVibe Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a0d1a 50%, #0d0d1a 100%);
+            color: #f2e6ff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(192, 132, 252, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #DA70D6, #C084FC, #cc66ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #C084FC, #DA70D6);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(192, 132, 252, 0.4);
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(26, 26, 26, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(192, 132, 252, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(192, 132, 252, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            color: #C084FC;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #DA70D6;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: rgba(242, 230, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .section {
+            background: rgba(26, 26, 26, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(192, 132, 252, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #C084FC;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(192, 132, 252, 0.1);
+        }
+
+        .table th {
+            background: rgba(192, 132, 252, 0.1);
+            color: #C084FC;
+            font-weight: 600;
+        }
+
+        .table tr:hover {
+            background: rgba(192, 132, 252, 0.05);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .status-inactive {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+
+        .status-premium {
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin: 0.25rem;
+        }
+
+        .btn-primary {
+            background: #C084FC;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #C084FC;
+        }
+
+        .error {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #f44336;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">FitVibe Admin</div>
+        <div class="user-info">
+            <span id="adminName">Admin User</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-value" id="totalUsers">-</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-dumbbell"></i></div>
+                <div class="stat-value" id="totalWorkouts">-</div>
+                <div class="stat-label">Total Workouts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-value" id="totalSessions">-</div>
+                <div class="stat-label">Sessions (30 days)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                <div class="stat-value" id="totalRevenue">-</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+        </div>
+
+        <!-- Recent Users -->
+        <div class="section">
+            <div class="section-title">
+                <i class="fas fa-users"></i>
+                Recent Users
+            </div>
+            <div id="usersLoading" class="loading">Loading users...</div>
+            <div id="usersError" class="error" style="display: none;"></div>
+            <table class="table" id="usersTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Plan</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recent Payments -->
+        <div class="section">
+            <div class="section-title">
+                <i class="fas fa-credit-card"></i>
+                Recent Payments
+            </div>
+            <div id="paymentsLoading" class="loading">Loading payments...</div>
+            <div id="paymentsError" class="error" style="display: none;"></div>
+            <table class="table" id="paymentsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Plan</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentsTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let authToken = null;
+
+        // Check authentication on page load
+        window.addEventListener('load', () => {
+            authToken = localStorage.getItem('fitvibeToken') || sessionStorage.getItem('fitvibeToken');
+            
+            if (!authToken) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Verify admin access
+            verifyAdminAccess();
+        });
+
+        async function verifyAdminAccess() {
+            try {
+                const response = await fetch(`${API_URL}/auth/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Authentication failed');
+                }
+
+                const data = await response.json();
+                
+                if (data.data.role !== 'admin') {
+                    alert('Admin access required');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                document.getElementById('adminName').textContent = data.data.name;
+                loadDashboardData();
+            } catch (error) {
+                console.error('Auth verification failed:', error);
+                window.location.href = 'login.html';
+            }
+        }
+
+        async function loadDashboardData() {
+            try {
+                // Load dashboard stats
+                const statsResponse = await fetch(`${API_URL}/admin/dashboard`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (statsResponse.ok) {
+                    const statsData = await statsResponse.json();
+                    updateStats(statsData.data);
+                }
+
+                // Load recent users
+                loadRecentUsers();
+                
+                // Load recent payments
+                loadRecentPayments();
+
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+
+        function updateStats(stats) {
+            document.getElementById('totalUsers').textContent = stats.total_users || 0;
+            document.getElementById('totalWorkouts').textContent = stats.total_workouts || 0;
+            document.getElementById('totalSessions').textContent = stats.total_sessions || 0;
+            document.getElementById('totalRevenue').textContent = `₹${stats.total_revenue || 0}`;
+        }
+
+        async function loadRecentUsers() {
+            try {
+                const response = await fetch(`${API_URL}/admin/users?limit=10`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load users');
+                }
+
+                const data = await response.json();
+                displayUsers(data.data.users);
+
+            } catch (error) {
+                console.error('Failed to load users:', error);
+                document.getElementById('usersLoading').style.display = 'none';
+                document.getElementById('usersError').style.display = 'block';
+                document.getElementById('usersError').textContent = 'Failed to load users';
+            }
+        }
+
+        function displayUsers(users) {
+            document.getElementById('usersLoading').style.display = 'none';
+            document.getElementById('usersTable').style.display = 'table';
+
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        ${user.subscription_plan ? 
+                            `<span class="status-badge status-premium">${user.subscription_plan}</span>` : 
+                            '<span class="status-badge">Free</span>'
+                        }
+                    </td>
+                    <td>
+                        <span class="status-badge ${user.is_active ? 'status-active' : 'status-inactive'}">
+                            ${user.is_active ? 'Active' : 'Inactive'}
+                        </span>
+                    </td>
+                    <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="viewUser(${user.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-danger" onclick="toggleUserStatus(${user.id}, ${user.is_active})">
+                            <i class="fas fa-${user.is_active ? 'ban' : 'check'}"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function loadRecentPayments() {
+            try {
+                const response = await fetch(`${API_URL}/admin/payments?limit=10`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load payments');
+                }
+
+                const data = await response.json();
+                displayPayments(data.data.payments);
+
+            } catch (error) {
+                console.error('Failed to load payments:', error);
+                document.getElementById('paymentsLoading').style.display = 'none';
+                document.getElementById('paymentsError').style.display = 'block';
+                document.getElementById('paymentsError').textContent = 'Failed to load payments';
+            }
+        }
+
+        function displayPayments(payments) {
+            document.getElementById('paymentsLoading').style.display = 'none';
+            document.getElementById('paymentsTable').style.display = 'table';
+
+            const tbody = document.getElementById('paymentsTableBody');
+            tbody.innerHTML = '';
+
+            payments.forEach(payment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${payment.user_name}</td>
+                    <td>
+                        <span class="status-badge status-premium">${payment.subscription_plan}</span>
+                    </td>
+                    <td>₹${payment.amount}</td>
+                    <td>
+                        <span class="status-badge ${payment.payment_status === 'completed' ? 'status-active' : 'status-inactive'}">
+                            ${payment.payment_status}
+                        </span>
+                    </td>
+                    <td>${new Date(payment.created_at).toLocaleDateString()}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function viewUser(userId) {
+            // Implement user details view
+            alert(`View user details for ID: ${userId}`);
+        }
+
+        async function toggleUserStatus(userId, currentStatus) {
+            const action = currentStatus ? 'deactivate' : 'activate';
+            
+            if (!confirm(`Are you sure you want to ${action} this user?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/admin/users/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        is_active: !currentStatus
+                    })
+                });
+
+                if (response.ok) {
+                    loadRecentUsers(); // Reload users table
+                } else {
+                    alert('Failed to update user status');
+                }
+            } catch (error) {
+                console.error('Failed to update user status:', error);
+                alert('Failed to update user status');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('fitvibeToken');
+            sessionStorage.removeItem('fitvibeToken');
+            localStorage.removeItem('fitvibeUser');
+            sessionStorage.removeItem('fitvibeUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

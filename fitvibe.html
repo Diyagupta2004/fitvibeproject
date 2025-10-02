@@ -887,8 +887,11 @@
             <h1 onclick="window.location.href='FitVibe.html'">FitVibe</h1>
             <nav>
                 <ul class="nav-links">
-                    <li><a href="FitVibe.html"><i class="fas fa-home"></i> HOME</a></li>
+                    <li><a href="fitvibe.html"><i class="fas fa-home"></i> HOME</a></li>
+                    <li><a href="exercises.html"><i class="fas fa-dumbbell"></i> EXERCISES</a></li>
                     <li><a href="BMIcheck.html"><i class="fas fa-calculator"></i> BMI</a></li>
+                    <li><a href="yogav.html"><i class="fas fa-leaf"></i> YOGA</a></li>
+                    <li><a href="zumba.html"><i class="fas fa-music"></i> ZUMBA</a></li>
                     <li><a href="pricing.html"><i class="fas fa-tags"></i> PRICING</a></li>
                     <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> LOGIN</a></li>
                     <li class="profile-icon-wrapper">
@@ -896,7 +899,10 @@
                             <i class="fas fa-user-circle" id="userIcon"></i>
                         </a>
                         <div class="profile-dropdown" id="profileDropdown">
-                            <a href="#" onclick="simulateLogin()"><i class="fas fa-sign-in-alt"></i> Login</a>
+                            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                            <a href="sign.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                            <a href="workoutplanaichatbot.html"><i class="fas fa-robot"></i> AI Trainer</a>
+                            <a href="game.html"><i class="fas fa-gamepad"></i> Games</a>
                             <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
                         </div>
                     </li>
@@ -931,20 +937,14 @@
             </a>
         </div>
         
-        <div class="image-container" style="--item-index: 1" onclick="showSubscribeMessage('Mindfulness')">
+        <div class="image-container" style="--item-index: 1" onclick="window.location.href='yogav.html'">
             <img src="mindfullness_image.jpeg" alt="Mindfulness" onerror="this.src='https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800'">
             <figcaption><i class="fas fa-brain"></i> Mindfulness</figcaption>
-            <div class="locked-overlay">
-                <i class="fas fa-lock"></i>
-            </div>
         </div>
 
-        <div class="image-container" style="--item-index: 2" onclick="showSubscribeMessage('Push-up features')">
+        <div class="image-container" style="--item-index: 2" onclick="window.location.href='pushu.html'">
             <img src="pushup_image.jpeg" alt="Push-ups" onerror="this.src='https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800'">
             <figcaption><i class="fas fa-dumbbell"></i> Push-up</figcaption>
-            <div class="locked-overlay">
-                <i class="fas fa-lock"></i>
-            </div>
         </div>
         
         <div class="image-container" style="--item-index: 3">
@@ -1169,12 +1169,16 @@
 
         function getStarted() {
             showToast('Redirecting to sign-up page...', 'info');
-            // In a real app, you would redirect: window.location.href = 'signup.html';
+            setTimeout(() => {
+                window.location.href = 'sign.html';
+            }, 1000);
         }
 
         function showPreview() {
-            showToast('Starting a quick preview...', 'info');
-            // In a real app, this could trigger a video or a mini-tour
+            showToast('Opening exercises page...', 'info');
+            setTimeout(() => {
+                window.location.href = 'exercises.html';
+            }, 1000);
         }
 
         function openImageModal(src) {
