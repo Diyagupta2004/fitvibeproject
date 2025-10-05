@@ -25,6 +25,7 @@
             --color-success: #4dff88;
         }
 
+        /* --- MODIFIED BODY --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, var(--color-dark-bg) 0%, #1a0d1a 50%, var(--color-dark-bg) 100%);
@@ -33,6 +34,10 @@
             padding: 20px;
             position: relative;
             overflow: hidden;
+            /* Added for centering */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* Navigation Styles */
@@ -81,15 +86,9 @@
             background: rgba(192, 132, 252, 0.2);
             color: var(--color-primary-purple);
         }
-
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding-top: 80px;
-        }
-
+        
+        /* --- REMOVED THE INCORRECT .login-container RULE --- */
+        
         /* Background Effects (Keeping Original for style) */
         body::before {
             content: '';
@@ -168,7 +167,7 @@
             75% { transform: translate(20px, 30px) rotate(270deg) scale(1.05); }
         }
         
-        /* Login Container */
+        /* Login Container (This is the correct rule to keep) */
         .login-container {
             background: var(--color-card-bg);
             backdrop-filter: blur(25px); /* Increased blur */
@@ -525,7 +524,6 @@
     </style>
 </head>
 <body>
-    <!-- Navigation Header -->
     <nav class="nav-header">
         <div class="nav-content">
             <a href="fitvibe.html" class="nav-logo">FitVibe</a>

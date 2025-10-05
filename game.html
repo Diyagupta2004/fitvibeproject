@@ -8,11 +8,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
         :root {
-            --neon-purple: #9d00ff; /* Main purple glow */
-            --neon-pink: #e065e0; /* Secondary pink for contrast */
-            --dark-bg: #0d0d0d;
-            --card-bg: #1a1a1a;
-            --red-warning: #ff4d4d;
+            --primary-purple: #8B5CF6; /* A modern, rich purple */
+            --accent-pink: #EC4899;    /* A vibrant pink for accents */
+            --dark-bg: #111827;       /* Very dark navy-blue */
+            --card-bg: #1F2937;       /* Lighter navy-blue */
+            --text-light: #F9FAFB;
+            --text-muted: #9CA3AF;
+            --red-warning: #EF4444;
         }
 
         * {
@@ -24,7 +26,7 @@
         body {
             height: 100vh;
             background: var(--dark-bg);
-            color: #fff;
+            color: var(--text-light);
             font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
@@ -33,44 +35,45 @@
             overflow: hidden;
         }
 
-        /* Neon glow effect - now purple */
-        .glow {
-            animation: pulseGlow 1.5s infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-            from {
-                text-shadow: 0 0 5px var(--neon-purple), 0 0 10px var(--neon-purple), 0 0 15px var(--neon-purple);
-                box-shadow: 0 0 5px var(--neon-purple), 0 0 15px var(--neon-purple);
-            }
-            to {
-                text-shadow: 0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple), 0 0 30px var(--neon-purple);
-                box-shadow: 0 0 10px var(--neon-purple), 0 0 25px var(--neon-purple);
-            }
-        }
-
         .game-container {
             width: 95%;
             max-width: 480px;
             background: var(--card-bg);
-            border-radius: 25px;
-            border: 2px solid var(--neon-purple);
-            box-shadow: 0 0 20px rgba(157, 0, 255, 0.4); /* Purple shadow */
+            border-radius: 20px;
+            border: 1px solid #374151;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             text-align: center;
             padding: 2rem;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             gap: 1.5rem;
             position: relative;
             z-index: 10;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* General hidden class for smooth transitions */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Fade transition classes */
+        .fade-out {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        .fade-in {
+            opacity: 1;
+            transform: scale(1);
         }
 
-        h1 {
+        header h1 {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--neon-pink); /* Using pink for main heading contrast */
+            color: var(--primary-purple);
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .info-section {
@@ -82,97 +85,96 @@
         }
 
         .info-section p {
-            color: var(--neon-purple);
+            color: var(--text-muted);
         }
 
         .info-section span {
-            color: #fff;
+            color: var(--text-light);
+            font-weight: 700;
         }
         
         #pose-display {
-            display: none; /* Hidden on initial load */
+            display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1rem;
+            transition: all 0.3s ease-in-out;
         }
 
         #pose-image {
             width: 250px;
             height: 250px;
-            object-fit: contain;
+            object-fit: cover;
             border-radius: 15px;
-            box-shadow: 0 0 15px rgba(157, 0, 255, 0.2); /* Purple shadow */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
         }
-
-        #pose-image.pulse {
-            animation: imagePulse 1s infinite;
-        }
-
-        @keyframes imagePulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
+        
         #pose-name {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 600;
-            color: var(--neon-pink);
-            transition: color 0.3s;
+            color: var(--text-light);
         }
 
         #pose-quote {
             font-style: italic;
             font-size: 0.9rem;
-            color: #aaa;
+            color: var(--text-muted);
+            max-width: 80%;
         }
 
         .timer-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
         }
 
         #timer {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--neon-purple);
-            text-shadow: 0 0 10px var(--neon-purple);
-            transition: color 0.3s, text-shadow 0.3s;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            line-height: 1;
         }
-
-        #timer.warning {
-            color: var(--red-warning);
-            text-shadow: 0 0 10px var(--red-warning);
+        
+        #progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: #374151;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        #progress-bar {
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-purple);
+            border-radius: 4px;
+            transition: width 0.5s linear, background-color 0.3s ease;
+        }
+        #progress-bar.warning {
+            background-color: var(--red-warning);
         }
 
         #message {
-            min-height: 20px;
+            min-height: 24px;
             font-size: 1rem;
-            font-weight: 600;
-            color: #fff;
+            font-weight: 500;
+            color: var(--accent-pink);
         }
 
-        .button-group {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            width: 100%;
-        }
-        
         #start-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
             text-align: center;
+            transition: all 0.3s ease-in-out;
         }
         
         #start-screen h2 {
             font-size: 1.8rem;
-            color: var(--neon-pink);
+            color: var(--text-light);
             margin-bottom: 0.5rem;
         }
 
@@ -184,71 +186,83 @@
 
         .difficulty-options button {
             background-color: transparent;
-            color: var(--neon-purple);
-            border: 2px solid var(--neon-purple);
+            color: var(--primary-purple);
+            border: 2px solid var(--primary-purple);
             border-radius: 50px;
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.2rem;
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .difficulty-options button:hover,
-        .difficulty-options button.active {
-            background-color: var(--neon-purple);
+        .difficulty-options button:hover {
+             background-color: var(--primary-purple);
             color: var(--dark-bg);
-            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .difficulty-options button.active {
+            background-color: var(--primary-purple);
+            color: var(--dark-bg);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
         }
 
         .btn {
-            background-color: var(--neon-purple);
+            background-color: var(--primary-purple);
             color: var(--dark-bg);
             padding: 0.8rem 2rem;
             border: none;
             border-radius: 50px;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.3); /* Purple shadow */
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .btn:hover {
-            background-color: #7a00cc;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(157, 0, 255, 0.5); /* Purple shadow */
+        .btn:hover:not(:disabled) {
+            background-color: #7C3AED; /* Darker purple */
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        .btn:active:not(:disabled) {
+            transform: translateY(0) scale(0.98);
         }
 
         .btn:disabled {
-            background-color: #333;
-            color: #666;
+            background-color: #374151;
+            color: #6B7280;
             cursor: not-allowed;
             box-shadow: none;
             transform: none;
         }
-
-        .btn-secondary {
-            background-color: var(--card-bg);
-            color: var(--neon-purple);
-            border: 2px solid var(--neon-purple);
-            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.3); /* Purple shadow */
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--neon-purple);
-            color: var(--dark-bg);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(157, 0, 255, 0.5); /* Purple shadow */
+        
+        #countdown-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(31, 41, 55, 0.9);
+            color: var(--text-light);
+            font-size: 8rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            border-radius: 20px;
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
         <header>
-            <h1 class="glow">FitVibe Yoga Hold</h1>
+            <h1>FitVibe Yoga Hold</h1>
         </header>
 
         <div class="info-section">
@@ -256,133 +270,148 @@
             <p>High Score: <span id="high-score">0</span></p>
         </div>
 
-        <div id="start-screen">
-            <h2>Yoga Challenge</h2>
-            <p>Select your difficulty level to begin.</p>
-            <div class="difficulty-options">
-                <button class="btn" data-difficulty="easy">Easy</button>
-                <button class="btn" data-difficulty="medium">Medium</button>
-                <button class="btn" data-difficulty="hard">Hard</button>
+        <main id="game-area">
+             <div id="start-screen">
+                <h2>Yoga Challenge</h2>
+                <p>Select your difficulty level to begin.</p>
+                <div class="difficulty-options">
+                    <button data-difficulty="easy">Easy</button>
+                    <button data-difficulty="medium">Medium</button>
+                    <button data-difficulty="hard">Hard</button>
+                </div>
+                <button id="startGameButton" class="btn hidden">Start Challenge</button>
             </div>
-        </div>
 
-        <div id="pose-display">
-            <h2 id="pose-name"></h2>
-            <img id="pose-image" src="" alt="Yoga Pose" />
-            <p id="pose-quote"></p>
-        </div>
+            <div id="pose-display" class="hidden fade-out">
+                <h2 id="pose-name"></h2>
+                <img id="pose-image" src="" alt="Yoga Pose" />
+                <p id="pose-quote"></p>
+            </div>
+        </main>
 
         <div class="timer-section">
             <div id="timer"></div>
+            <div id="progress-bar-container" class="hidden">
+                 <div id="progress-bar"></div>
+            </div>
             <p id="message"></p>
         </div>
 
         <div class="button-group">
-            <button id="startButton" class="btn" style="display: none;">Start</button>
+            <button id="nextPoseButton" class="btn hidden">Next Pose</button>
         </div>
+
+        <div id="countdown-overlay"></div>
     </div>
 
-    <audio id="beepSound" src="https://www.soundjay.com/button/beep-07a.mp3" preload="auto"></audio>
-    <audio id="warningSound" src="https://www.soundjay.com/button/button-10.mp3" preload="auto"></audio>
+    <audio id="countdownSound" src="https://www.soundjay.com/button/beep-07a.mp3" preload="auto"></audio>
+    <audio id="goSound" src="https://www.soundjay.com/button/button-10.mp3" preload="auto"></audio>
     <audio id="successSound" src="https://www.soundjay.com/button/button-20.mp3" preload="auto"></audio>
 
     <script>
         const poses = [
             {
-                name: "Tree Pose (Vrikshasana)",
+                name: "Tree Pose",
                 image: "tree.jpg.jpeg",
                 quote: "Stand tall, root deep, and balance like a tree.",
                 duration: { easy: 20, medium: 30, hard: 45 }
             },
             {
-                name: "Warrior II (Virabhadrasana II)",
+                name: "Warrior II",
                 image: "warrior.jpg.jpeg",
                 quote: "Channel your inner strength and stand your ground.",
                 duration: { easy: 25, medium: 35, hard: 50 }
             },
             {
-                name: "Cobra Pose (Bhujangasana)",
+                name: "Cobra Pose",
                 image: "cobra.jpg.jpeg",
                 quote: "Rise up, open your heart, and breathe with strength.",
                 duration: { easy: 15, medium: 25, hard: 40 }
             },
             {
-                name: "Downward Dog (Adho Mukha Svanasana)",
+                name: "Downward Dog",
                 image: "downwarddog.jpg.jpeg",
                 quote: "Feel the stretch and let go of all tension.",
                 duration: { easy: 30, medium: 45, hard: 60 }
             },
             {
-                name: "Child’s Pose (Balasana)",
+                name: "Child’s Pose",
                 image: "childpose.jpg.jpeg",
                 quote: "Rest, reset, and restore your energy.",
                 duration: { easy: 10, medium: 20, hard: 30 }
             }
         ];
 
+        // DOM Elements
         const timerDisplay = document.getElementById("timer");
         const poseNameDisplay = document.getElementById("pose-name");
         const poseImage = document.getElementById("pose-image");
         const poseQuoteDisplay = document.getElementById("pose-quote");
         const messageDisplay = document.getElementById("message");
-        const startButton = document.getElementById("startButton");
         const scoreDisplay = document.getElementById("score");
         const highScoreDisplay = document.getElementById("high-score");
+        
         const startScreen = document.getElementById("start-screen");
         const poseDisplay = document.getElementById("pose-display");
         const difficultyButtons = document.querySelectorAll('.difficulty-options button');
+        const startGameButton = document.getElementById('startGameButton');
+        const nextPoseButton = document.getElementById('nextPoseButton');
+        
+        const progressBar = document.getElementById('progress-bar');
+        const progressBarContainer = document.getElementById('progress-bar-container');
+        const countdownOverlay = document.getElementById('countdown-overlay');
 
-        const beepSound = document.getElementById("beepSound");
-        const warningSound = document.getElementById("warningSound");
+        // Sounds
+        const countdownSound = document.getElementById("countdownSound");
+        const goSound = document.getElementById("goSound");
         const successSound = document.getElementById("successSound");
 
-        let timeLeft;
+        // Game State
         let timerInterval;
         let score = 0;
         let highScore = localStorage.getItem('yogaHighScore') || 0;
-        let currentDifficulty = 'easy'; // Default difficulty
+        let currentDifficulty = null;
+        let currentPose;
 
-        highScoreDisplay.textContent = highScore;
-
-        function getRandomPose() {
-            const index = Math.floor(Math.random() * poses.length);
-            return poses[index];
+        function initialize() {
+            highScoreDisplay.textContent = highScore;
+            messageDisplay.textContent = 'Select a difficulty to begin.';
         }
 
         function playSound(sound) {
             sound.currentTime = 0;
-            sound.play();
+            sound.play().catch(e => console.error("Sound play failed:", e));
         }
 
-        function updateUI(pose) {
-            poseNameDisplay.innerText = pose.name;
-            poseImage.src = pose.image;
-            poseImage.alt = pose.name;
-            poseQuoteDisplay.innerText = pose.quote;
-            timerDisplay.textContent = timeLeft;
-            messageDisplay.textContent = "Get ready...";
-            timerDisplay.classList.remove("warning");
+        function updatePoseUI() {
+            poseNameDisplay.innerText = currentPose.name;
+            poseImage.src = currentPose.image;
+            poseImage.alt = currentPose.name;
+            poseQuoteDisplay.innerText = currentPose.quote;
         }
 
-        function startTimer() {
-            startButton.disabled = true;
-            startButton.textContent = "Holding...";
-            messageDisplay.textContent = "Hold the pose! 🧘‍♀️";
+        function startRound() {
+            currentPose = poses[Math.floor(Math.random() * poses.length)];
+            const duration = currentPose.duration[currentDifficulty];
+            let timeLeft = duration;
             
-            const currentPose = getRandomPose();
-            timeLeft = currentPose.duration[currentDifficulty]; // Set duration based on difficulty
-            updateUI(currentPose);
+            updatePoseUI();
+            
+            messageDisplay.textContent = "Hold the pose! 🧘‍♀️";
+            timerDisplay.textContent = timeLeft;
+            progressBar.style.width = '100%';
+            progressBar.classList.remove('warning');
+            progressBarContainer.classList.remove('hidden');
+            nextPoseButton.classList.add('hidden');
 
             timerInterval = setInterval(() => {
                 timeLeft--;
+                const progressPercentage = (timeLeft / duration) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
                 timerDisplay.textContent = timeLeft;
-                poseImage.classList.add('pulse');
 
                 if (timeLeft <= 5 && timeLeft > 0) {
-                    timerDisplay.classList.add('warning');
-                    playSound(warningSound);
-                } else if (timeLeft % 5 === 0 && timeLeft > 0) {
-                    playSound(beepSound);
+                    progressBar.classList.add('warning');
                 }
 
                 if (timeLeft <= 0) {
@@ -397,46 +426,65 @@
                         highScoreDisplay.textContent = highScore;
                         localStorage.setItem('yogaHighScore', highScore);
                     }
-
-                    startButton.textContent = "Next Pose";
-                    startButton.disabled = false;
-                    timerDisplay.classList.remove('warning');
-                    poseImage.classList.remove('pulse');
+                    
+                    nextPoseButton.classList.remove('hidden');
+                    progressBarContainer.classList.add('hidden');
+                    timerDisplay.textContent = '';
                 }
             }, 1000);
         }
 
-        function showGameScreen() {
-            startScreen.style.display = 'none';
-            poseDisplay.style.display = 'flex';
-            startButton.style.display = 'block';
-            startButton.textContent = 'Start Holding';
+        function startCountdown() {
+            countdownOverlay.classList.remove('hidden');
+            let count = 3;
+
+            function updateCountdown() {
+                if (count > 0) {
+                    countdownOverlay.style.opacity = '1';
+                    countdownOverlay.textContent = count;
+                    playSound(countdownSound);
+                    count--;
+                    setTimeout(() => {
+                       countdownOverlay.style.opacity = '0';
+                       setTimeout(updateCountdown, 400); // Wait for fade out
+                    }, 600); // Time digit is visible
+                } else {
+                    countdownOverlay.style.opacity = '1';
+                    countdownOverlay.textContent = "HOLD!";
+                    playSound(goSound);
+                    setTimeout(() => {
+                        countdownOverlay.style.opacity = '0';
+                        setTimeout(() => countdownOverlay.classList.add('hidden'), 300);
+                        startRound();
+                    }, 800);
+                }
+            }
+            updateCountdown();
         }
 
         difficultyButtons.forEach(button => {
             button.addEventListener('click', (e) => {
-                // Remove active class from all buttons
                 difficultyButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Add active class to the clicked button
                 e.target.classList.add('active');
-                
                 currentDifficulty = e.target.dataset.difficulty;
-                showGameScreen();
-                startTimer();
+                startGameButton.classList.remove('hidden');
+                messageDisplay.textContent = `Ready for a ${currentDifficulty} challenge?`;
             });
         });
 
-        startButton.addEventListener('click', startTimer);
+        startGameButton.addEventListener('click', () => {
+            startScreen.classList.add('fade-out');
+            setTimeout(() => {
+                startScreen.classList.add('hidden');
+                poseDisplay.classList.remove('hidden');
+                poseDisplay.classList.remove('fade-out');
+            }, 300);
+            startCountdown();
+        });
 
-        // Initial setup on load
-        window.onload = () => {
-            // No initial pose displayed, show start screen instead
-            poseDisplay.style.display = 'none';
-            startScreen.style.display = 'flex';
-            timerDisplay.textContent = '';
-            messageDisplay.textContent = 'Select a difficulty to begin.';
-        };
+        nextPoseButton.addEventListener('click', startCountdown);
+
+        window.onload = initialize;
     </script>
 </body>
 </html>

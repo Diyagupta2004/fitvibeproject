@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitVibe: Breathing Exercises</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-purple: #8B5CF6; /* A modern, rich purple */
+            --accent-pink: #EC4899;    /* A vibrant pink for accents */
+            --dark-bg: #111827;       /* Very dark navy-blue */
+            --card-bg: #1F2937;       /* Lighter navy-blue */
+            --text-light: #F9FAFB;
+            --text-muted: #9CA3AF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100vh;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid #374151;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        
+        /* --- Selection Screen --- */
+        #selection-screen h1 {
+            font-size: 1.8rem;
+            color: var(--primary-purple);
+            margin-bottom: 1.5rem;
+        }
+
+        .option-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .option-group h2 {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            background-color: transparent;
+            color: var(--primary-purple);
+            border: 2px solid var(--primary-purple);
+            border-radius: 50px;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-purple);
+            color: var(--dark-bg);
+            transform: translateY(-2px);
+        }
+
+        .btn.active {
+            background-color: var(--primary-purple);
+            color: var(--dark-bg);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        #start-button {
+            background-color: var(--accent-pink);
+            color: var(--text-light);
+            border: none;
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+        }
+
+        #start-button:disabled {
+            background-color: #374151;
+            color: #6B7280;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* --- Exercise Screen --- */
+        #exercise-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 350px;
+        }
+
+        #pacer-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #pacer {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-purple);
+            transition: transform 3s ease-in-out;
+        }
+        
+        #pacer.grow {
+            transform: scale(2);
+        }
+
+        #pacer.shrink {
+            transform: scale(1);
+        }
+
+        #instruction {
+            position: absolute;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #session-timer {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+        
+        #end-session-button {
+            margin-top: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="selection-screen">
+            <h1>Breathing Exercises</h1>
+            <div class="option-group">
+                <h2>1. Choose a Technique</h2>
+                <div class="button-row" id="technique-buttons">
+                    <button class="btn" data-technique="box">Box Breathing</button>
+                    <button class="btn" data-technique="4-7-8">4-7-8 Relax</button>
+                    <button class="btn" data-technique="energize">Energize</button>
+                </div>
+            </div>
+            <div class="option-group">
+                <h2>2. Select Duration</h2>
+                <div class="button-row" id="duration-buttons">
+                    <button class="btn" data-duration="60">1 min</button>
+                    <button class="btn" data-duration="120">2 min</button>
+                    <button class="btn" data-duration="300">5 min</button>
+                </div>
+            </div>
+            <button id="start-button" class="btn" disabled>Start</button>
+        </div>
+
+        <div id="exercise-screen" class="hidden">
+            <div id="pacer-container">
+                <div id="pacer"></div>
+                <div id="instruction">Get Ready...</div>
+            </div>
+            <div id="session-timer"></div>
+            <button id="end-session-button" class="btn">End Session</button>
+        </div>
+    </div>
+
+    <script>
+        const techniques = {
+            box: {
+                name: 'Box Breathing',
+                steps: [
+                    { instruction: 'Breathe In', duration: 4000 },
+                    { instruction: 'Hold', duration: 4000 },
+                    { instruction: 'Breathe Out', duration: 4000 },
+                    { instruction: 'Hold', duration: 4000 },
+                ],
+            },
+            '4-7-8': {
+                name: '4-7-8 Breathing',
+                steps: [
+                    { instruction: 'Breathe In', duration: 4000 },
+                    { instruction: 'Hold', duration: 7000 },
+                    { instruction: 'Breathe Out', duration: 8000 },
+                ],
+            },
+            energize: {
+                name: 'Energizing Breath',
+                steps: [
+                    { instruction: 'Breathe In', duration: 3000 },
+                    { instruction: 'Breathe Out', duration: 3000 },
+                ],
+            },
+        };
+
+        // DOM Elements
+        const selectionScreen = document.getElementById('selection-screen');
+        const exerciseScreen = document.getElementById('exercise-screen');
+        const techniqueButtons = document.getElementById('technique-buttons');
+        const durationButtons = document.getElementById('duration-buttons');
+        const startButton = document.getElementById('start-button');
+        const endSessionButton = document.getElementById('end-session-button');
+        const pacer = document.getElementById('pacer');
+        const instructionText = document.getElementById('instruction');
+        const sessionTimerText = document.getElementById('session-timer');
+
+        // State
+        let selectedTechnique = null;
+        let selectedDuration = null;
+        let sessionInterval, instructionTimeout;
+        
+        function checkSelections() {
+            startButton.disabled = !(selectedTechnique && selectedDuration);
+        }
+
+        techniqueButtons.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                selectedTechnique = e.target.dataset.technique;
+                document.querySelectorAll('#technique-buttons .btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                checkSelections();
+            }
+        });
+
+        durationButtons.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                selectedDuration = parseInt(e.target.dataset.duration, 10);
+                document.querySelectorAll('#duration-buttons .btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                checkSelections();
+            }
+        });
+
+        function startSession() {
+            selectionScreen.classList.add('hidden');
+            exerciseScreen.classList.remove('hidden');
+
+            let timeLeft = selectedDuration;
+            updateSessionTimer(timeLeft);
+
+            sessionInterval = setInterval(() => {
+                timeLeft--;
+                updateSessionTimer(timeLeft);
+                if (timeLeft <= 0) {
+                    stopSession();
+                }
+            }, 1000);
+            
+            runInstructionCycle(0);
+        }
+        
+        function stopSession() {
+            clearInterval(sessionInterval);
+            clearTimeout(instructionTimeout);
+            selectionScreen.classList.remove('hidden');
+            exerciseScreen.classList.add('hidden');
+            pacer.className = 'pacer'; // Reset pacer class
+        }
+
+        function runInstructionCycle(stepIndex) {
+            const technique = techniques[selectedTechnique];
+            const step = technique.steps[stepIndex];
+            
+            instructionText.textContent = step.instruction;
+
+            if (step.instruction.toLowerCase().includes('in')) {
+                pacer.classList.add('grow');
+            } else {
+                pacer.classList.remove('grow');
+            }
+            
+            instructionTimeout = setTimeout(() => {
+                const nextStepIndex = (stepIndex + 1) % technique.steps.length;
+                runInstructionCycle(nextStepIndex);
+            }, step.duration);
+        }
+        
+        function updateSessionTimer(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            sessionTimerText.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        startButton.addEventListener('click', startSession);
+        endSessionButton.addEventListener('click', stopSession);
+
+    </script>
+</body>
+</html>
